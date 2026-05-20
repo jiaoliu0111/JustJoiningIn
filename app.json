@@ -1,0 +1,42 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/bustle/bustle",
+    "pages/group/group",
+    "pages/mine/mine",
+    "pages/detail/detail"
+  ],
+  "window": {
+    "navigationBarTitleText": "凑热闹",
+    "navigationBarBackgroundColor": "#fff7df",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#fff8ea",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#9b8f78",
+    "selectedColor": "#f6a400",
+    "backgroundColor": "#fffdf6",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/bustle/bustle",
+        "text": "热闹"
+      },
+      {
+        "pagePath": "pages/group/group",
+        "text": "凑局"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

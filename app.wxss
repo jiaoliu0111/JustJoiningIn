@@ -1,0 +1,158 @@
+page {
+  min-height: 100%;
+  background: #fff8ea;
+  color: #2f2a20;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+  padding: 28rpx 28rpx 56rpx;
+  box-sizing: border-box;
+}
+
+.section {
+  margin-top: 30rpx;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18rpx;
+  font-size: 34rpx;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.section-more {
+  color: #9b8f78;
+  font-size: 24rpx;
+  font-weight: 500;
+}
+
+.card {
+  border-radius: 16rpx;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12rpx 32rpx rgba(76, 52, 20, 0.08);
+  box-sizing: border-box;
+}
+
+.card + .card {
+  margin-top: 18rpx;
+}
+
+.card-pad {
+  padding: 24rpx;
+}
+
+.muted {
+  color: #8d826e;
+}
+
+.tiny {
+  color: #9b8f78;
+  font-size: 22rpx;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44rpx;
+  padding: 0 16rpx;
+  border-radius: 999rpx;
+  background: #fff4d1;
+  color: #9a6500;
+  font-size: 22rpx;
+  line-height: 1;
+}
+
+.tag.green {
+  background: #e9f4d2;
+  color: #587d22;
+}
+
+.tag.blue {
+  background: #e5f3f8;
+  color: #36788b;
+}
+
+.primary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 92rpx;
+  border-radius: 18rpx;
+  background: #f6a400;
+  color: #fff;
+  font-size: 32rpx;
+  font-weight: 800;
+  box-shadow: 0 14rpx 28rpx rgba(246, 164, 0, 0.24);
+}
+
+.secondary-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 76rpx;
+  border-radius: 16rpx;
+  background: #fff4d1;
+  color: #9a6500;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.danger-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 76rpx;
+  border-radius: 16rpx;
+  background: #fff0e7;
+  color: #c95625;
+  font-size: 28rpx;
+  font-weight: 700;
+}
+
+.item-title {
+  color: #2f2a20;
+  font-size: 30rpx;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.item-desc {
+  margin-top: 10rpx;
+  color: #766c5b;
+  font-size: 25rpx;
+  line-height: 1.55;
+}
+
+.meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  margin-top: 12rpx;
+  color: #8d826e;
+  font-size: 23rpx;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16rpx;
+}
+
+.switch-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20rpx;
+}

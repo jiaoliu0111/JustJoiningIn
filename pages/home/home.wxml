@@ -1,0 +1,105 @@
+<view class="page home-page">
+  <view class="hero">
+    <view class="hero-top">
+      <text>上海 · 周末防宅家</text>
+      <text>附近 3km</text>
+    </view>
+    <view class="hero-title">今天就近出去晃一晃</view>
+    <view class="hero-subtitle">不用精致打卡，也不用强行聊天。楼下有点热闹，轻装出门就行。</view>
+    <view class="tag-row">
+      <text class="tag">免费优先</text>
+      <text class="tag green">无需准备</text>
+      <text class="tag blue">静音也行</text>
+    </view>
+  </view>
+
+  <view class="soft-reminder card card-pad">
+    <view>
+      <view class="item-title">你家附近有人在压马路</view>
+      <view class="item-desc">步行 8 分钟，2 人等 1 人，1 小时自动散局。</view>
+    </view>
+    <view class="reminder-dot"></view>
+  </view>
+
+  <view class="primary-btn instant-btn" bindtap="goGroup">即刻凑局</view>
+
+  <view class="section">
+    <view class="section-title">
+      <text>同城热闹实况</text>
+      <text class="section-more" bindtap="goBustle">全部</text>
+    </view>
+    <view class="map-card card">
+      <view class="map-river"></view>
+      <view class="map-road road-a"></view>
+      <view class="map-road road-b"></view>
+      <block wx:for="{{hotspots}}" wx:key="id">
+        <view class="map-pin pin-{{index}}" data-type="hotspot" data-id="{{item.id}}" bindtap="openDetail">
+          <view class="pin-core"></view>
+          <text>{{item.heat}}</text>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="section">
+    <view class="section-title">
+      <text>当前可加入</text>
+      <text class="section-more" bindtap="goGroup">去凑局</text>
+    </view>
+    <block wx:for="{{groups}}" wx:key="id">
+      <view class="card card-pad list-item" data-type="group" data-id="{{item.id}}" bindtap="openDetail">
+        <view>
+          <view class="item-title">{{item.title}}</view>
+          <view class="item-desc">{{item.place}} · {{item.distance}}km · {{item.status}}</view>
+          <view class="tag-row">
+            <text class="tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
+          </view>
+        </view>
+        <view class="join-chip">{{item.members}}/{{item.capacity}}</view>
+      </view>
+    </block>
+  </view>
+
+  <view class="section">
+    <view class="section-title">
+      <text>官方活动精选</text>
+      <text class="section-more" bindtap="goBustle">更多</text>
+    </view>
+    <block wx:for="{{activities}}" wx:key="id">
+      <view class="card card-pad" data-type="activity" data-id="{{item.id}}" bindtap="openDetail">
+        <view class="tiny">{{item.source}} · {{item.time}}</view>
+        <view class="item-title">{{item.title}}</view>
+        <view class="item-desc">{{item.description}}</view>
+        <view class="tag-row">
+          <text class="tag green">{{item.district}}</text>
+          <text class="tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view class="section">
+    <view class="section-title">
+      <text>现成放空路线</text>
+    </view>
+    <view class="two-col">
+      <block wx:for="{{routes}}" wx:key="id">
+        <view class="route-card card card-pad" data-type="route" data-id="{{item.id}}" bindtap="openDetail">
+          <view class="route-time">{{item.duration}}</view>
+          <view class="item-title">{{item.title}}</view>
+          <view class="item-desc">{{item.difficulty}} · {{item.distance}}km</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="section checklist card card-pad">
+    <view class="section-title">
+      <text>出门只要三件事</text>
+    </view>
+    <view class="check-item" wx:for="{{checklist}}" wx:key="*this">
+      <text class="check-dot"></text>
+      <text>{{item}}</text>
+    </view>
+  </view>
+</view>

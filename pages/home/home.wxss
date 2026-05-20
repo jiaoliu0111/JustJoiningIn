@@ -1,0 +1,193 @@
+.home-page {
+  padding-top: 24rpx;
+}
+
+.hero {
+  padding: 34rpx 30rpx 38rpx;
+  border-radius: 22rpx;
+  background:
+    radial-gradient(circle at 88% 18%, rgba(255, 255, 255, 0.85) 0 58rpx, transparent 60rpx),
+    linear-gradient(135deg, #ffe49a 0%, #fff5d4 54%, #dfeeb5 100%);
+  box-shadow: 0 18rpx 42rpx rgba(93, 64, 18, 0.12);
+}
+
+.hero-top {
+  display: flex;
+  justify-content: space-between;
+  color: #8a7141;
+  font-size: 23rpx;
+}
+
+.hero-title {
+  max-width: 520rpx;
+  margin-top: 42rpx;
+  color: #2f2a20;
+  font-size: 52rpx;
+  font-weight: 900;
+  line-height: 1.14;
+  letter-spacing: 0;
+}
+
+.hero-subtitle {
+  margin-top: 18rpx;
+  color: #6f634d;
+  font-size: 27rpx;
+  line-height: 1.55;
+}
+
+.soft-reminder {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 22rpx;
+}
+
+.reminder-dot {
+  width: 28rpx;
+  height: 28rpx;
+  border-radius: 50%;
+  background: #f6a400;
+  box-shadow: 0 0 0 12rpx rgba(246, 164, 0, 0.14);
+  flex: 0 0 auto;
+}
+
+.instant-btn {
+  margin-top: 22rpx;
+}
+
+.map-card {
+  position: relative;
+  height: 420rpx;
+  overflow: hidden;
+  background: #dceebd;
+}
+
+.map-river {
+  position: absolute;
+  left: -40rpx;
+  right: -30rpx;
+  bottom: 36rpx;
+  height: 96rpx;
+  border-radius: 50%;
+  background: #bde3ef;
+  transform: rotate(-8deg);
+}
+
+.map-road {
+  position: absolute;
+  height: 34rpx;
+  border-radius: 999rpx;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 0 0 2rpx rgba(176, 190, 150, 0.22);
+}
+
+.road-a {
+  left: -40rpx;
+  top: 150rpx;
+  width: 820rpx;
+  transform: rotate(22deg);
+}
+
+.road-b {
+  left: 120rpx;
+  top: 80rpx;
+  width: 560rpx;
+  transform: rotate(-42deg);
+}
+
+.map-pin {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 10rpx 14rpx;
+  border-radius: 999rpx;
+  background: #fffdf6;
+  color: #9a6500;
+  font-size: 22rpx;
+  font-weight: 800;
+  box-shadow: 0 10rpx 24rpx rgba(57, 75, 30, 0.14);
+}
+
+.pin-core {
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  background: #f6a400;
+}
+
+.pin-0 {
+  left: 80rpx;
+  top: 92rpx;
+}
+
+.pin-1 {
+  right: 72rpx;
+  top: 128rpx;
+}
+
+.pin-2 {
+  left: 210rpx;
+  bottom: 98rpx;
+}
+
+.pin-3 {
+  right: 116rpx;
+  bottom: 56rpx;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22rpx;
+}
+
+.join-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 92rpx;
+  height: 92rpx;
+  border-radius: 50%;
+  background: #f6a400;
+  color: #fff;
+  font-size: 26rpx;
+  font-weight: 900;
+  flex: 0 0 auto;
+}
+
+.route-card {
+  min-height: 220rpx;
+}
+
+.route-time {
+  display: inline-flex;
+  margin-bottom: 22rpx;
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  background: #e9f4d2;
+  color: #587d22;
+  font-size: 22rpx;
+  font-weight: 700;
+}
+
+.checklist .section-title {
+  margin-bottom: 4rpx;
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  padding-top: 18rpx;
+  color: #5e5548;
+  font-size: 28rpx;
+}
+
+.check-dot {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: #f6a400;
+}

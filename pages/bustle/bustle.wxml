@@ -1,0 +1,41 @@
+<view class="page">
+  <view class="bustle-head">
+    <view class="eyebrow">上海周末热闹</view>
+    <view class="head-title">不用规划，挑一个近的就行</view>
+    <view class="head-desc">公园、社区、步道和老街都混在一起看，先别把出门想复杂。</view>
+  </view>
+
+  <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="filter-row">
+      <view
+        wx:for="{{filters}}"
+        wx:key="id"
+        class="filter-chip {{activeFilter === item.id ? 'active' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="selectFilter"
+      >
+        {{item.label}}
+      </view>
+    </view>
+  </scroll-view>
+
+  <view class="section">
+    <block wx:for="{{visibleCards}}" wx:key="id">
+      <view class="card card-pad bustle-card" data-type="{{item.cardType}}" data-id="{{item.id}}" bindtap="openDetail">
+        <view class="card-top">
+          <text class="badge">{{item.badge}}</text>
+          <text class="tiny">{{item.distance}}km</text>
+        </view>
+        <view class="item-title">{{item.title}}</view>
+        <view class="item-desc">{{item.description}}</view>
+        <view class="meta-row">
+          <text>{{item.time || item.duration}}</text>
+          <text>{{item.place || item.difficulty}}</text>
+        </view>
+        <view class="tag-row">
+          <text class="tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>
