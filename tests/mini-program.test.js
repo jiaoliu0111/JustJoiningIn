@@ -91,3 +91,15 @@ test('detail helper can find every mock item type', () => {
   assert.equal(findDetail('group', mock.groups[0].id).title, mock.groups[0].title);
   assert.equal(findDetail('unknown', 'nope'), null);
 });
+
+test('home distance badge is a real centered component', () => {
+  const wxml = fs.readFileSync(path.join(root, 'pages/home/home.wxml'), 'utf8');
+  const wxss = fs.readFileSync(path.join(root, 'pages/home/home.wxss'), 'utf8');
+
+  assert.match(wxml, /class="hero-distance"/);
+  assert.match(wxss, /\.hero-distance\s*\{[^}]*display:\s*flex;/s);
+  assert.match(wxss, /\.hero-distance\s*\{[^}]*align-items:\s*center;/s);
+  assert.match(wxss, /\.hero-distance\s*\{[^}]*justify-content:\s*center;/s);
+  assert.match(wxss, /\.hero-distance\s*\{[^}]*width:\s*110rpx;/s);
+  assert.match(wxss, /\.hero-distance\s*\{[^}]*height:\s*110rpx;/s);
+});
