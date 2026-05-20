@@ -121,6 +121,18 @@ test('home hero keeps month-day next to the time text', () => {
   assert.equal(/hero-calendar/.test(wxml), false);
 });
 
+test('home visual layers separate page background from modules', () => {
+  const appWxss = fs.readFileSync(path.join(root, 'app.wxss'), 'utf8');
+  const homeWxss = fs.readFileSync(path.join(root, 'pages/home/home.wxss'), 'utf8');
+
+  assert.match(appWxss, /page\s*\{[^}]*linear-gradient/s);
+  assert.match(appWxss, /\.card\s*\{[^}]*background:\s*#fffdf7;/s);
+  assert.match(appWxss, /\.card\s*\{[^}]*border:\s*2rpx solid #f1dfc2;/s);
+  assert.match(homeWxss, /\.hero\s*\{[^}]*border:\s*2rpx solid rgba\(255,\s*253,\s*247,\s*0\.86\);/s);
+  assert.match(homeWxss, /\.map-card\s*\{[^}]*background:\s*#fff9ec;/s);
+  assert.doesNotMatch(homeWxss, /\.map-card\s*\{[^}]*background:\s*#fff3d8;/s);
+});
+
 test('visible app copy follows hotspot discovery direction', () => {
   const visibleFiles = [
     'app.json',
