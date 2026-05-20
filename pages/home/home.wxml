@@ -1,8 +1,17 @@
 <view class="page home-page">
   <view class="hero">
     <view class="hero-top">
-      <text>上海 · 周末防宅家</text>
-      <view class="hero-distance">附近 3km</view>
+      <view class="hero-date">
+        <text class="hero-city">上海 · 周末防宅家</text>
+        <view class="hero-calendar">
+          <text>{{currentDate}}</text>
+          <text>{{currentWeekday}}</text>
+        </view>
+      </view>
+      <view class="hero-distance">
+        <text class="hero-time">{{currentTime}}</text>
+        <text class="hero-range">附近 3km</text>
+      </view>
     </view>
     <view class="hero-title">今天就近出去晃一晃</view>
     <view class="hero-subtitle">不用精致打卡，也不用强行聊天。楼下有点热闹，轻装出门就行。</view>

@@ -21,7 +21,8 @@ test('mini program shell files exist', () => {
     'project.config.json',
     'sitemap.json',
     'data/mock.js',
-    'utils/format.js'
+    'utils/format.js',
+    'utils/time.js'
   ].forEach((file) => assert.equal(exists(file), true, `${file} should exist`));
 });
 
@@ -102,4 +103,13 @@ test('home distance badge is a real centered component', () => {
   assert.match(wxss, /\.hero-distance\s*\{[^}]*justify-content:\s*center;/s);
   assert.match(wxss, /\.hero-distance\s*\{[^}]*width:\s*110rpx;/s);
   assert.match(wxss, /\.hero-distance\s*\{[^}]*height:\s*110rpx;/s);
+});
+
+test('home clock formats date, weekday, and time for the hero', () => {
+  const { formatHomeClock } = require('../utils/time.js');
+  const clock = formatHomeClock(new Date('2026-05-20T15:11:00+08:00'));
+
+  assert.equal(clock.currentDate, '2026年05月20日');
+  assert.equal(clock.currentWeekday, '周三');
+  assert.equal(clock.currentTime, '15:11');
 });
