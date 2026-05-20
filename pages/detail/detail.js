@@ -1,4 +1,5 @@
-const { findDetail, detailTitle, groupProgress } = require('../../utils/format.js');
+const mock = require('../../data/mock.js');
+const { findDetail, detailTitle } = require('../../utils/format.js');
 
 Page({
   data: {
@@ -11,7 +12,20 @@ Page({
 
   onLoad(options) {
     const type = options.type || '';
-    const detail = findDetail(type, options.id);
+    let detail = findDetail(type, options.id);
+    if (type === 'reason' && detail) {
+      const moment = mock.nearbyMoments.find((item) => item.id === detail.momentId);
+      detail = {
+        ...detail,
+        linkedMoment: moment,
+        tags: moment ? moment.tags : [],
+        description: moment ? moment.description : detail.subtitle,
+        place: moment ? moment.place : '',
+        walkMinutes: moment ? moment.walkMinutes : '',
+        timeLabel: moment ? moment.timeLabel : '',
+        lowPressureNote: moment ? moment.lowPressureNote : ''
+      };
+    }
     const title = detailTitle(type);
     this.setData({
       type,
@@ -27,50 +41,31 @@ Page({
 
   primaryText(type) {
     if (type === 'route') {
-      return '开始这条路线';
+      return '现在去看看';
     }
-    if (type === 'group') {
-      return '加入这个凑局';
-    }
-    return '去这里凑热闹';
+    return '现在去看看';
   },
 
   buildMeta(type, detail) {
     if (!detail) {
       return [];
     }
-    if (type === 'activity') {
-      return [detail.time, detail.place, detail.source, `${detail.distance}km`];
-    }
-    if (type === 'hotspot') {
-      return [detail.type, `热度 ${detail.heat}`, `${detail.activeGroups} 个凑局`, `${detail.distance}km`];
+    if (type === 'moment') {
+      return [`步行 ${detail.walkMinutes} 分钟`, detail.timeLabel, detail.place, detail.noSignup ? '不用报名' : '看现场提示'];
     }
     if (type === 'route') {
       return [detail.duration, detail.difficulty, `${detail.distance}km`];
     }
-    if (type === 'group') {
-      return [detail.place, groupProgress(detail), detail.duration, `${detail.distance}km`];
+    if (type === 'reason') {
+      return [`步行 ${detail.walkMinutes} 分钟`, detail.timeLabel, detail.place, '路过看看也行'];
     }
     return [];
   },
 
   takeAction() {
-    if (this.data.type === 'group') {
-      wx.showToast({
-        title: '已加入，轻松点',
-        icon: 'none'
-      });
-      return;
-    }
-    if (this.data.type === 'route') {
-      wx.showToast({
-        title: '出门清单已备好',
-        icon: 'none'
-      });
-      return;
-    }
-    wx.switchTab({
-      url: '/pages/group/group'
+    wx.showToast({
+      title: '路过看看也行',
+      icon: 'none'
     });
   }
 });

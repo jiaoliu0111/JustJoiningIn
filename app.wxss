@@ -1,7 +1,7 @@
 page {
   min-height: 100%;
-  background: #fff8ea;
-  color: #2f2a20;
+  background: #fff3d8;
+  color: #2e251f;
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -32,9 +32,9 @@ page {
 }
 
 .card {
-  border-radius: 16rpx;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 12rpx 32rpx rgba(76, 52, 20, 0.08);
+  border-radius: 24rpx;
+  background: #fffdf7;
+  box-shadow: 0 12rpx 30rpx rgba(46, 37, 31, 0.07);
   box-sizing: border-box;
 }
 
@@ -68,20 +68,20 @@ page {
   min-height: 44rpx;
   padding: 0 16rpx;
   border-radius: 999rpx;
-  background: #fff4d1;
-  color: #9a6500;
+  background: #fff1df;
+  color: #b95d20;
   font-size: 22rpx;
   line-height: 1;
 }
 
 .tag.green {
-  background: #e9f4d2;
-  color: #587d22;
+  background: #e8f4df;
+  color: #4f8548;
 }
 
 .tag.blue {
-  background: #e5f3f8;
-  color: #36788b;
+  background: #fff7dc;
+  color: #8d6c22;
 }
 
 .primary-btn {
@@ -89,12 +89,12 @@ page {
   align-items: center;
   justify-content: center;
   min-height: 92rpx;
-  border-radius: 18rpx;
-  background: #f6a400;
-  color: #fff;
+  border-radius: 999rpx;
+  background: #ff8a3d;
+  color: #fffdf7;
   font-size: 32rpx;
   font-weight: 800;
-  box-shadow: 0 14rpx 28rpx rgba(246, 164, 0, 0.24);
+  box-shadow: 0 14rpx 28rpx rgba(255, 138, 61, 0.24);
 }
 
 .secondary-btn {
@@ -102,9 +102,10 @@ page {
   align-items: center;
   justify-content: center;
   min-height: 76rpx;
-  border-radius: 16rpx;
-  background: #fff4d1;
-  color: #9a6500;
+  border-radius: 999rpx;
+  background: #fffdf7;
+  color: #2e251f;
+  border: 2rpx solid #eaddc7;
   font-size: 28rpx;
   font-weight: 700;
 }
@@ -122,7 +123,7 @@ page {
 }
 
 .item-title {
-  color: #2f2a20;
+  color: #2e251f;
   font-size: 30rpx;
   font-weight: 800;
   line-height: 1.35;

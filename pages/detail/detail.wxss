@@ -1,11 +1,11 @@
 .detail-hero {
   padding-top: 34rpx;
-  background: linear-gradient(145deg, #fff1bf 0%, #fffdf6 58%, #e5f1cb 100%);
+  background: linear-gradient(145deg, #fff3d8 0%, #fffdf7 58%, #e6f1df 100%);
 }
 
 .detail-title {
   margin-top: 18rpx;
-  color: #2f2a20;
+  color: #2e251f;
   font-size: 46rpx;
   font-weight: 900;
   line-height: 1.22;
@@ -23,8 +23,8 @@
   min-height: 74rpx;
   padding: 0 18rpx;
   border-radius: 14rpx;
-  background: #fff8ea;
-  color: #6c614f;
+  background: #fff3d8;
+  color: #655648;
   font-size: 25rpx;
   line-height: 1.35;
 }
@@ -35,7 +35,7 @@
   align-items: center;
   gap: 14rpx;
   padding: 12rpx 0;
-  color: #5e5548;
+  color: #655648;
   font-size: 27rpx;
   line-height: 1.45;
 }
@@ -44,7 +44,7 @@
   width: 18rpx;
   height: 18rpx;
   border-radius: 50%;
-  background: #f6a400;
+  background: #ff8a3d;
 }
 
 .detail-action {

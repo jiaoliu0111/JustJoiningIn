@@ -1,10 +1,9 @@
 const mock = require('../data/mock.js');
 
 const collections = {
-  activity: mock.activities,
-  hotspot: mock.hotspots,
+  moment: mock.nearbyMoments,
+  reason: mock.reasonCards,
   route: mock.routes,
-  group: mock.groups
 };
 
 function findDetail(type, id) {
@@ -17,10 +16,9 @@ function findDetail(type, id) {
 
 function detailTitle(type) {
   return {
-    activity: '官方活动',
-    hotspot: '附近热闹',
+    moment: '附近小热闹',
+    reason: '出门理由',
     route: '放空路线',
-    group: '临时凑局'
   }[type] || '详情';
 }
 
@@ -28,13 +26,8 @@ function joinTags(tags) {
   return Array.isArray(tags) ? tags.join(' · ') : '';
 }
 
-function groupProgress(group) {
-  return `${group.members}/${group.capacity} 人 · ${group.status}`;
-}
-
 module.exports = {
   findDetail,
   detailTitle,
-  joinTags,
-  groupProgress
+  joinTags
 };

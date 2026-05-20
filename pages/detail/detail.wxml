@@ -10,7 +10,7 @@
 
   <view class="section card card-pad">
     <view class="section-title">
-      <text>轻松信息</text>
+      <text>一眼信息</text>
     </view>
     <view class="info-grid">
       <view class="info-item" wx:for="{{meta}}" wx:key="*this">
@@ -29,14 +29,13 @@
     </view>
   </view>
 
-  <view class="section card card-pad" wx:if="{{type === 'group'}}">
+  <view class="section card card-pad" wx:if="{{type === 'moment' || type === 'reason'}}">
     <view class="section-title">
-      <text>减负规则</text>
+      <text>为什么不尴尬</text>
     </view>
-    <view class="rule">最多 {{detail.capacity}} 人，不变成团建。</view>
-    <view class="rule">{{detail.duration}} 后自动散局，不用维持关系。</view>
-    <view class="rule" wx:if="{{detail.quiet}}">静音同行，不聊天也没关系。</view>
-    <view class="rule" wx:if="{{detail.anonymous}}">短时匿名，结束后不留社交痕迹。</view>
+    <view class="rule">免费，低成本试一下。</view>
+    <view class="rule">不用报名，到了再决定停多久。</view>
+    <view class="rule">{{detail.lowPressureNote || '路过看看也行。'}}</view>
   </view>
 
   <view class="primary-btn detail-action" bindtap="takeAction">{{primaryText}}</view>
@@ -45,6 +44,6 @@
 <view class="page empty-page" wx:else>
   <view class="card card-pad">
     <view class="item-title">没找到这个热闹</view>
-    <view class="item-desc">可能已经散局了，回首页看看附近还有什么。</view>
+    <view class="item-desc">可能已经结束了，回首页看看附近还有什么。</view>
   </view>
 </view>

@@ -2,18 +2,17 @@ const mock = require('../../data/mock.js');
 
 const filters = [
   { id: 'free', label: '免费' },
-  { id: 'near', label: '3km 内' },
-  { id: 'weekend', label: '周末' },
-  { id: 'quiet', label: '静音友好' },
-  { id: 'park', label: '公园活动' },
-  { id: 'community', label: '社区活动' }
+  { id: 'near', label: '步行 10 分钟内' },
+  { id: 'now', label: '现在开始' },
+  { id: 'nosignup', label: '不用报名' },
+  { id: 'passby', label: '路过看看' },
+  { id: 'quiet', label: '安静友好' }
 ];
 
 function toCards() {
   return [
-    ...mock.activities.map((item) => ({ ...item, cardType: 'activity', badge: item.category })),
-    ...mock.hotspots.map((item) => ({ ...item, cardType: 'hotspot', badge: item.type, time: '现在热度' })),
-    ...mock.routes.map((item) => ({ ...item, cardType: 'route', badge: '放空路线', time: item.duration }))
+    ...mock.nearbyMoments.map((item) => ({ ...item, cardType: 'moment', badge: item.bubble, displayTime: item.timeLabel, displayPlace: item.place })),
+    ...mock.routes.map((item) => ({ ...item, cardType: 'route', badge: '顺路路线', displayTime: item.duration, displayPlace: item.difficulty, walkMinutes: Math.round(item.distance * 6) }))
   ];
 }
 
@@ -22,22 +21,22 @@ function matches(card, activeFilter) {
     return true;
   }
   if (activeFilter === 'free') {
-    return card.free === true || (card.tags || []).includes('免费逛');
+    return card.free === true || (card.tags || []).includes('免费');
   }
   if (activeFilter === 'near') {
-    return card.distance <= 3;
+    return card.walkMinutes <= 10;
   }
-  if (activeFilter === 'weekend') {
-    return (card.tags || []).includes('周末') || /周/.test(card.time || '');
+  if (activeFilter === 'now') {
+    return /现在|正在/.test(card.timeLabel || card.displayTime || '');
+  }
+  if (activeFilter === 'nosignup') {
+    return card.noSignup === true || (card.tags || []).includes('不用报名');
+  }
+  if (activeFilter === 'passby') {
+    return (card.tags || []).includes('路过看看也行') || (card.tags || []).includes('看看就行');
   }
   if (activeFilter === 'quiet') {
-    return card.quietFriendly === true || (card.tags || []).includes('静音友好');
-  }
-  if (activeFilter === 'park') {
-    return card.category === '公园活动' || card.type === '社区公园';
-  }
-  if (activeFilter === 'community') {
-    return card.category === '社区活动' || card.type === '社区热闹';
+    return card.quietFriendly === true || (card.tags || []).includes('安静友好');
   }
   return true;
 }

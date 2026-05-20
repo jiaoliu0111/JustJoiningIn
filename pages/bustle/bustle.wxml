@@ -1,8 +1,8 @@
 <view class="page">
   <view class="bustle-head">
-    <view class="eyebrow">上海周末热闹</view>
-    <view class="head-title">不用规划，挑一个近的就行</view>
-    <view class="head-desc">公园、社区、步道和老街都混在一起看，先别把出门想复杂。</view>
+    <view class="eyebrow">附近正在发生</view>
+    <view class="head-title">挑一个免费的小事出门</view>
+    <view class="head-desc">咖啡试饮、草坪吉他、旧书交换、手作体验。路过看看也行，不用把出门想复杂。</view>
   </view>
 
   <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
@@ -24,13 +24,13 @@
       <view class="card card-pad bustle-card" data-type="{{item.cardType}}" data-id="{{item.id}}" bindtap="openDetail">
         <view class="card-top">
           <text class="badge">{{item.badge}}</text>
-          <text class="tiny">{{item.distance}}km</text>
+          <text class="tiny">步行 {{item.walkMinutes}} 分钟</text>
         </view>
         <view class="item-title">{{item.title}}</view>
         <view class="item-desc">{{item.description}}</view>
         <view class="meta-row">
-          <text>{{item.time || item.duration}}</text>
-          <text>{{item.place || item.difficulty}}</text>
+          <text>{{item.displayTime}}</text>
+          <text>{{item.displayPlace}}</text>
         </view>
         <view class="tag-row">
           <text class="tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>

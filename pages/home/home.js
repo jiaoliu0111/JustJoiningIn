@@ -3,11 +3,10 @@ const { formatHomeClock } = require('../../utils/time.js');
 
 Page({
   data: {
-    launchStates: mock.launchStates,
-    activities: mock.activities.slice(0, 2),
-    hotspots: mock.hotspots,
+    moments: mock.nearbyMoments,
+    featuredMoments: mock.nearbyMoments.slice(0, 3),
     routes: mock.routes.slice(0, 2),
-    groups: mock.groups.slice(0, 2),
+    reasons: mock.reasonCards,
     checklist: mock.checklist,
     currentDate: '',
     currentWeekday: '',
@@ -49,7 +48,7 @@ Page({
     }
   },
 
-  goGroup() {
+  goReason() {
     wx.switchTab({
       url: '/pages/group/group'
     });

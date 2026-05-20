@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   gap: 22rpx;
-  background: linear-gradient(135deg, #fff1bf 0%, #fffdf6 58%, #e8f3ce 100%);
+  background: linear-gradient(135deg, #fff3d8 0%, #fffdf7 58%, #e6f1df 100%);
 }
 
 .avatar {
@@ -12,8 +12,8 @@
   width: 104rpx;
   height: 104rpx;
   border-radius: 50%;
-  background: #f6a400;
-  color: #fff;
+  background: #ff8a3d;
+  color: #fffdf7;
   font-size: 42rpx;
   font-weight: 900;
   flex: 0 0 auto;
@@ -31,16 +31,16 @@
   align-items: center;
   justify-content: center;
   min-height: 74rpx;
-  border-radius: 16rpx;
-  background: #fff8ea;
+  border-radius: 999rpx;
+  background: #fff3d8;
   color: #766c5b;
   font-size: 27rpx;
   font-weight: 700;
 }
 
 .distance-chip.active {
-  background: #f6a400;
-  color: #fff;
+  background: #ff8a3d;
+  color: #fffdf7;
 }
 
 .pref-row {
@@ -69,5 +69,5 @@
   width: 18rpx;
   height: 18rpx;
   border-radius: 50%;
-  background: #f6a400;
+  background: #ff8a3d;
 }

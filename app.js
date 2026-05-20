@@ -1,16 +1,17 @@
 App({
   globalData: {
-    activeGroup: null,
+    activeReason: null,
     preferences: {
-      maxDistance: 3,
-      anonymous: true,
+      freeOnly: true,
+      walkMinutes: 10,
+      noSignupFirst: true,
       quietFriendly: true,
-      weekendReminder: true
+      gentleReminder: true
     }
   },
 
-  setActiveGroup(group) {
-    this.globalData.activeGroup = group;
+  setActiveReason(reason) {
+    this.globalData.activeReason = reason;
   },
 
   updatePreferences(nextPreferences) {

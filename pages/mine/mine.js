@@ -4,12 +4,12 @@ Page({
   data: {
     preferences: mock.preferences,
     checklist: mock.checklist,
-    distances: [1, 3, 5]
+    walkMinutes: [6, 10, 15]
   },
 
-  selectDistance(event) {
+  selectWalkMinutes(event) {
     this.setData({
-      'preferences.maxDistance': Number(event.currentTarget.dataset.value)
+      'preferences.walkMinutes': Number(event.currentTarget.dataset.value)
     });
   },
 

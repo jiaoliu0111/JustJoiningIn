@@ -3,52 +3,52 @@
     <view class="avatar">凑</view>
     <view>
       <view class="item-title">周末轻装用户</view>
-      <view class="item-desc">不经营人设，不攒积分，只记录自己出过门。</view>
+      <view class="item-desc">只找附近、免费、马上能去的小热闹。</view>
     </view>
   </view>
 
   <view class="section card card-pad">
     <view class="section-title">
-      <text>安全距离</text>
+      <text>步行范围</text>
     </view>
-    <view class="item-desc">默认只看附近热闹，远的就先算了。</view>
+    <view class="item-desc">走太远就不像顺路了，先看近的。</view>
     <view class="distance-row">
       <view
-        wx:for="{{distances}}"
+        wx:for="{{walkMinutes}}"
         wx:key="*this"
-        class="distance-chip {{preferences.maxDistance === item ? 'active' : ''}}"
+        class="distance-chip {{preferences.walkMinutes === item ? 'active' : ''}}"
         data-value="{{item}}"
-        bindtap="selectDistance"
+        bindtap="selectWalkMinutes"
       >
-        {{item}}km
+        {{item}} 分钟
       </view>
     </view>
   </view>
 
   <view class="section card card-pad">
     <view class="section-title">
-      <text>减负偏好</text>
+      <text>发现偏好</text>
     </view>
     <view class="pref-row">
       <view>
-        <view class="item-title">默认匿名</view>
-        <view class="item-desc">短时结伴，不留下社交痕迹。</view>
+        <view class="item-title">只看免费</view>
+        <view class="item-desc">没有消费压力，看看也行。</view>
       </view>
-      <switch checked="{{preferences.anonymous}}" color="#f6a400" data-key="anonymous" bindchange="togglePreference" />
+      <switch checked="{{preferences.freeOnly}}" color="#ff8a3d" data-key="freeOnly" bindchange="togglePreference" />
     </view>
     <view class="pref-row">
       <view>
-        <view class="item-title">接受静音同行</view>
-        <view class="item-desc">不聊天，只陪伴。</view>
+        <view class="item-title">不用报名优先</view>
+        <view class="item-desc">到了再说，不先做承诺。</view>
       </view>
-      <switch checked="{{preferences.quietFriendly}}" color="#f6a400" data-key="quietFriendly" bindchange="togglePreference" />
+      <switch checked="{{preferences.noSignupFirst}}" color="#ff8a3d" data-key="noSignupFirst" bindchange="togglePreference" />
     </view>
     <view class="pref-row">
       <view>
-        <view class="item-title">周末轻提醒</view>
-        <view class="item-desc">只在周末顺手提醒，不催。</view>
+        <view class="item-title">安静路过友好</view>
+        <view class="item-desc">不用硬聊，不用参与很久。</view>
       </view>
-      <switch checked="{{preferences.weekendReminder}}" color="#f6a400" data-key="weekendReminder" bindchange="togglePreference" />
+      <switch checked="{{preferences.quietFriendly}}" color="#ff8a3d" data-key="quietFriendly" bindchange="togglePreference" />
     </view>
   </view>
 

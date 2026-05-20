@@ -1,66 +1,43 @@
 <view class="page">
   <view class="group-hero">
-    <view class="eyebrow">即刻凑局</view>
-    <view class="group-title">不用写文案，选一下就能出门</view>
-    <view class="group-desc">最多 3 人，默认 1 小时。沉默也能同路，不想走了就散。</view>
+    <view class="eyebrow">出门理由</view>
+    <view class="group-title">给你一个现在出门的小理由</view>
+    <view class="group-desc">不约人，不报名，不需要准备。挑一个近的，路过看看就行。</view>
+  </view>
+
+  <view class="section card card-pad reason-main" wx:if="{{selectedMoment}}">
+    <view class="tiny">推荐给你</view>
+    <view class="reason-bubble">{{selectedMoment.bubble}}</view>
+    <view class="item-title">{{selectedReason.title}}</view>
+    <view class="item-desc">{{selectedReason.subtitle}}</view>
+    <view class="reason-meta">
+      <text>步行 {{selectedMoment.walkMinutes}} 分钟</text>
+      <text>{{selectedMoment.timeLabel}}</text>
+      <text>不用报名</text>
+    </view>
+    <view class="tag-row">
+      <text class="tag" wx:for="{{selectedMoment.tags}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="primary-btn reason-action" bindtap="openSelected">现在去看看</view>
+    <view class="secondary-btn reason-secondary" bindtap="shuffleReason">换一个近点的</view>
   </view>
 
   <view class="section">
     <view class="section-title">
-      <text>今天是什么状态</text>
+      <text>其他轻松理由</text>
     </view>
-    <view class="state-card card card-pad {{selectedState === item.id ? 'active' : ''}}" wx:for="{{launchStates}}" wx:key="id" data-id="{{item.id}}" bindtap="selectState">
-      <view class="state-icon">{{item.icon}}</view>
+    <view
+      class="card card-pad reason-item {{selectedIndex === index ? 'active' : ''}}"
+      wx:for="{{reasons}}"
+      wx:key="id"
+      data-index="{{index}}"
+      bindtap="pickReason"
+    >
       <view>
         <view class="item-title">{{item.title}}</view>
         <view class="item-desc">{{item.subtitle}}</view>
       </view>
-    </view>
-  </view>
-
-  <view class="section card card-pad">
-    <view class="switch-row">
-      <view>
-        <view class="item-title">静音同行</view>
-        <view class="item-desc">不聊天，只陪着走一段。</view>
-      </view>
-      <switch checked="{{quiet}}" color="#f6a400" bindchange="toggleQuiet" />
-    </view>
-    <view class="duration-row">
-      <view class="duration-chip {{duration === '1 小时' ? 'active' : ''}}" data-value="1 小时" bindtap="selectDuration">1 小时</view>
-      <view class="duration-chip {{duration === '半天内' ? 'active' : ''}}" data-value="半天内" bindtap="selectDuration">半天内</view>
-    </view>
-  </view>
-
-  <view class="primary-btn publish-btn" bindtap="publishGroup">发布：{{selectedTitle}}</view>
-
-  <view class="matched-card card card-pad" wx:if="{{matched}}">
-    <view class="item-title">凑上了，轻松点</view>
-    <view class="item-desc">{{duration}} · {{quiet ? '静音同行' : '能聊就聊'}} · 结束自动散局</view>
-    <view class="member-row">
-      <view class="member" wx:for="{{matchMembers}}" wx:key="*this">{{item}}</view>
-    </view>
-    <view class="danger-btn" bindtap="dissolveGroup">一键散局</view>
-  </view>
-
-  <view class="matched-card card card-pad" wx:if="{{dissolved}}">
-    <view class="item-title">已散局</view>
-    <view class="item-desc">系统已代你通知对方，不用解释。想再出门时重新凑就行。</view>
-  </view>
-
-  <view class="section">
-    <view class="section-title">
-      <text>现成可以加入</text>
-    </view>
-    <view class="card card-pad group-item" wx:for="{{groups}}" wx:key="id" data-id="{{item.id}}" bindtap="openDetail">
-      <view>
-        <view class="item-title">{{item.title}}</view>
-        <view class="item-desc">{{item.place}} · {{item.duration}} · {{item.status}}</view>
-        <view class="tag-row">
-          <text class="tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
-        </view>
-      </view>
-      <view class="capacity">{{item.members}}/{{item.capacity}}</view>
+      <view class="reason-arrow">看</view>
     </view>
   </view>
 </view>

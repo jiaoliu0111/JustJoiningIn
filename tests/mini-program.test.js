@@ -38,7 +38,7 @@ test('app config registers detail page and four tabs', () => {
   assert.equal(app.tabBar.list.length, 4);
   assert.deepEqual(
     app.tabBar.list.map((item) => item.text),
-    ['首页', '热闹', '凑局', '我的']
+    ['首页', '热闹', '理由', '我的']
   );
 });
 
@@ -56,29 +56,27 @@ test('all page component files exist', () => {
 
 test('mock data exposes complete MVP content', () => {
   const mock = require('../data/mock.js');
-  assert.ok(mock.activities.length >= 4, 'activities should include official items');
-  assert.ok(mock.hotspots.length >= 4, 'hotspots should include nearby places');
+  assert.ok(mock.nearbyMoments.length >= 5, 'nearby moments should include local small happenings');
+  assert.ok(mock.reasonCards.length >= 3, 'reason cards should include low-pressure prompts');
   assert.ok(mock.routes.length >= 3, 'routes should include ready plans');
-  assert.ok(mock.groups.length >= 3, 'groups should include temporary teams');
-  assert.ok(mock.launchStates.length === 3, 'launch states should stay minimal');
 
-  const activity = mock.activities[0];
+  const moment = mock.nearbyMoments[0];
   [
     'id',
     'title',
-    'category',
-    'district',
-    'time',
+    'bubble',
+    'walkMinutes',
+    'timeLabel',
     'place',
-    'distance',
-    'source',
     'tags',
     'description',
     'free',
-    'quietFriendly'
-  ].forEach((key) => assert.ok(Object.hasOwn(activity, key), `activity.${key}`));
+    'noSignup',
+    'lowPressureNote'
+  ].forEach((key) => assert.ok(Object.hasOwn(moment, key), `moment.${key}`));
 
-  assert.equal(mock.preferences.maxDistance, 3);
+  assert.equal(mock.preferences.walkMinutes, 10);
+  assert.equal(mock.preferences.freeOnly, true);
   assert.ok(mock.checklist.includes('穿舒服的鞋'));
 });
 
@@ -86,10 +84,9 @@ test('detail helper can find every mock item type', () => {
   const mock = require('../data/mock.js');
   const { findDetail } = require('../utils/format.js');
 
-  assert.equal(findDetail('activity', mock.activities[0].id).title, mock.activities[0].title);
-  assert.equal(findDetail('hotspot', mock.hotspots[0].id).title, mock.hotspots[0].title);
+  assert.equal(findDetail('moment', mock.nearbyMoments[0].id).title, mock.nearbyMoments[0].title);
+  assert.equal(findDetail('reason', mock.reasonCards[0].id).title, mock.reasonCards[0].title);
   assert.equal(findDetail('route', mock.routes[0].id).title, mock.routes[0].title);
-  assert.equal(findDetail('group', mock.groups[0].id).title, mock.groups[0].title);
   assert.equal(findDetail('unknown', 'nope'), null);
 });
 
@@ -112,4 +109,27 @@ test('home clock formats date, weekday, and time for the hero', () => {
   assert.equal(clock.currentDate, '2026年05月20日');
   assert.equal(clock.currentWeekday, '周三');
   assert.equal(clock.currentTime, '15:11');
+});
+
+test('visible app copy follows hotspot discovery direction', () => {
+  const visibleFiles = [
+    'app.json',
+    'data/mock.js',
+    'pages/home/home.wxml',
+    'pages/bustle/bustle.wxml',
+    'pages/group/group.json',
+    'pages/group/group.wxml',
+    'pages/detail/detail.wxml',
+    'pages/mine/mine.wxml'
+  ];
+  const text = visibleFiles
+    .map((file) => fs.readFileSync(path.join(root, file), 'utf8'))
+    .join('\n');
+
+  ['匹配搭子', '发布凑局', '一键散局', '散局', '匿名结伴', '现成可以加入', '等 1 人', '等 2 人'].forEach((phrase) => {
+    assert.equal(text.includes(phrase), false, `visible copy should not include ${phrase}`);
+  });
+  assert.match(text, /附近有什么免费小热闹/);
+  assert.match(text, /给我一个出门理由/);
+  assert.match(text, /路过看看也行/);
 });
