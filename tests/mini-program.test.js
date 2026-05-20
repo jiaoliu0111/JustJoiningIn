@@ -90,16 +90,17 @@ test('detail helper can find every mock item type', () => {
   assert.equal(findDetail('unknown', 'nope'), null);
 });
 
-test('home distance badge is a real centered component', () => {
+test('home time bar is a balanced horizontal component', () => {
   const wxml = fs.readFileSync(path.join(root, 'pages/home/home.wxml'), 'utf8');
   const wxss = fs.readFileSync(path.join(root, 'pages/home/home.wxss'), 'utf8');
 
-  assert.match(wxml, /class="hero-distance"/);
-  assert.match(wxss, /\.hero-distance\s*\{[^}]*display:\s*flex;/s);
-  assert.match(wxss, /\.hero-distance\s*\{[^}]*align-items:\s*center;/s);
-  assert.match(wxss, /\.hero-distance\s*\{[^}]*justify-content:\s*center;/s);
-  assert.match(wxss, /\.hero-distance\s*\{[^}]*width:\s*132rpx;/s);
-  assert.match(wxss, /\.hero-distance\s*\{[^}]*height:\s*132rpx;/s);
+  assert.match(wxml, /class="hero-timebar"/);
+  assert.match(wxml, /class="hero-date-line"[^>]*>\{\{currentDate\}\} · \{\{currentWeekday\}\}/);
+  assert.match(wxml, /class="hero-time-pill"/);
+  assert.equal(/class="hero-distance"/.test(wxml), false);
+  assert.match(wxss, /\.hero-timebar\s*\{[^}]*display:\s*flex;/s);
+  assert.match(wxss, /\.hero-timebar\s*\{[^}]*align-items:\s*center;/s);
+  assert.match(wxss, /\.hero-timebar\s*\{[^}]*border-radius:\s*999rpx;/s);
 });
 
 test('home clock formats date, weekday, and time for the hero', () => {
@@ -111,12 +112,12 @@ test('home clock formats date, weekday, and time for the hero', () => {
   assert.equal(clock.currentTime, '15:11');
 });
 
-test('home hero keeps month-day next to the time badge', () => {
+test('home hero keeps month-day next to the time text', () => {
   const wxml = fs.readFileSync(path.join(root, 'pages/home/home.wxml'), 'utf8');
 
   assert.equal(/currentDate/.test(wxml), true);
   assert.match(wxml, /class="hero-time"[^>]*>\{\{currentTime\}\}/);
-  assert.match(wxml, /class="hero-day"[^>]*>\{\{currentDate\}\} \{\{currentWeekday\}\}/);
+  assert.match(wxml, /class="hero-date-line"[^>]*>\{\{currentDate\}\} · \{\{currentWeekday\}\}/);
   assert.equal(/hero-calendar/.test(wxml), false);
 });
 

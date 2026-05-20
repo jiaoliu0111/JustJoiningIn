@@ -1,12 +1,12 @@
 <view class="page home-page">
   <view class="hero">
-    <view class="hero-top">
+    <view class="hero-timebar">
       <view class="hero-date">
         <text class="hero-city">上海 · 附近小热闹</text>
+        <text class="hero-date-line">{{currentDate}} · {{currentWeekday}}</text>
       </view>
-      <view class="hero-distance">
+      <view class="hero-time-pill">
         <text class="hero-time">{{currentTime}}</text>
-        <text class="hero-day">{{currentDate}} {{currentWeekday}}</text>
         <text class="hero-range">附近 3km</text>
       </view>
     </view>
