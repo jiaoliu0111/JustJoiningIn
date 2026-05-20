@@ -98,17 +98,26 @@ test('home distance badge is a real centered component', () => {
   assert.match(wxss, /\.hero-distance\s*\{[^}]*display:\s*flex;/s);
   assert.match(wxss, /\.hero-distance\s*\{[^}]*align-items:\s*center;/s);
   assert.match(wxss, /\.hero-distance\s*\{[^}]*justify-content:\s*center;/s);
-  assert.match(wxss, /\.hero-distance\s*\{[^}]*width:\s*110rpx;/s);
-  assert.match(wxss, /\.hero-distance\s*\{[^}]*height:\s*110rpx;/s);
+  assert.match(wxss, /\.hero-distance\s*\{[^}]*width:\s*132rpx;/s);
+  assert.match(wxss, /\.hero-distance\s*\{[^}]*height:\s*132rpx;/s);
 });
 
 test('home clock formats date, weekday, and time for the hero', () => {
   const { formatHomeClock } = require('../utils/time.js');
   const clock = formatHomeClock(new Date('2026-05-20T15:11:00+08:00'));
 
-  assert.equal(clock.currentDate, '2026年05月20日');
+  assert.equal(clock.currentDate, '05月20日');
   assert.equal(clock.currentWeekday, '周三');
   assert.equal(clock.currentTime, '15:11');
+});
+
+test('home hero keeps month-day next to the time badge', () => {
+  const wxml = fs.readFileSync(path.join(root, 'pages/home/home.wxml'), 'utf8');
+
+  assert.equal(/currentDate/.test(wxml), true);
+  assert.match(wxml, /class="hero-time"[^>]*>\{\{currentTime\}\}/);
+  assert.match(wxml, /class="hero-day"[^>]*>\{\{currentDate\}\} \{\{currentWeekday\}\}/);
+  assert.equal(/hero-calendar/.test(wxml), false);
 });
 
 test('visible app copy follows hotspot discovery direction', () => {

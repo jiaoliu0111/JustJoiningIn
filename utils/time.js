@@ -6,7 +6,7 @@ function pad(value) {
 
 function formatHomeClock(date = new Date()) {
   return {
-    currentDate: `${date.getFullYear()}年${pad(date.getMonth() + 1)}月${pad(date.getDate())}日`,
+    currentDate: `${pad(date.getMonth() + 1)}月${pad(date.getDate())}日`,
     currentWeekday: weekdays[date.getDay()],
     currentTime: `${pad(date.getHours())}:${pad(date.getMinutes())}`
   };

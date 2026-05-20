@@ -33,24 +33,13 @@
   line-height: 1.25;
 }
 
-.hero-calendar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12rpx;
-  margin-top: 14rpx;
-  color: #655648;
-  font-size: 26rpx;
-  font-weight: 800;
-  line-height: 1.25;
-}
-
 .hero-distance {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 110rpx;
-  height: 110rpx;
+  width: 132rpx;
+  height: 132rpx;
   border-radius: 50%;
   background: rgba(255, 253, 247, 0.92);
   color: #856d4d;
@@ -61,15 +50,23 @@
 
 .hero-time {
   color: #2e251f;
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 900;
   line-height: 1;
 }
 
-.hero-range {
+.hero-day {
   margin-top: 10rpx;
   color: #856d4d;
-  font-size: 20rpx;
+  font-size: 19rpx;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.hero-range {
+  margin-top: 8rpx;
+  color: #856d4d;
+  font-size: 19rpx;
   font-weight: 700;
   line-height: 1;
 }

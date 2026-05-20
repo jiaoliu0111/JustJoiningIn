@@ -3,13 +3,10 @@
     <view class="hero-top">
       <view class="hero-date">
         <text class="hero-city">上海 · 附近小热闹</text>
-        <view class="hero-calendar">
-          <text>{{currentDate}}</text>
-          <text>{{currentWeekday}}</text>
-        </view>
       </view>
       <view class="hero-distance">
         <text class="hero-time">{{currentTime}}</text>
+        <text class="hero-day">{{currentDate}} {{currentWeekday}}</text>
         <text class="hero-range">附近 3km</text>
       </view>
     </view>
