@@ -222,6 +222,36 @@ test('hotspot cloud function exposes data actions for pages', () => {
   assert.ok(config.timeout >= 20, 'cloud function timeout should allow cold starts and activity sync');
 });
 
+test('activity source configs cover Shanghai district and review sources', () => {
+  const { SOURCE_CONFIGS, normalizeSourceConfig } = require('../cloudfunctions/hotspotApi/source-configs.js');
+
+  assert.ok(SOURCE_CONFIGS.length >= 6);
+  assert.ok(SOURCE_CONFIGS.some((source) => source.district === '浦东'));
+  assert.ok(SOURCE_CONFIGS.some((source) => source.district === '徐汇'));
+  assert.ok(SOURCE_CONFIGS.some((source) => source.trustLevel === 'whitelist'));
+  assert.ok(SOURCE_CONFIGS.some((source) => source.trustLevel === 'review'));
+
+  const normalized = normalizeSourceConfig({
+    id: 'source-test',
+    name: '测试社区活动',
+    district: '杨浦',
+    url: 'https://example.com/events'
+  });
+
+  assert.deepEqual(normalized, {
+    id: 'source-test',
+    name: '测试社区活动',
+    district: '杨浦',
+    sourceType: 'community',
+    url: 'https://example.com/events',
+    parserType: 'genericList',
+    trustLevel: 'review',
+    status: 'active',
+    categoryHint: '本区热门',
+    notes: ''
+  });
+});
+
 test('activity sync parses official Shanghai event list pages', () => {
   const { extractListItems } = require('../cloudfunctions/hotspotApi/activity-sync.js');
   const html = `
