@@ -288,8 +288,23 @@ function selectSources(sources, sourceIds, sourceLimit) {
     .slice(0, sourceLimit);
 }
 
+function sourceFromRaw(raw = {}) {
+  return {
+    id: raw.sourceId || '',
+    name: raw.sourceName || '',
+    district: raw.district || raw.sourceDistrict || '',
+    sourceType: raw.sourceType,
+    trustLevel: raw.trustLevel,
+    categoryHint: raw.categoryHint,
+    status: raw.sourceStatus || 'active'
+  };
+}
+
 function normalizeActivity(raw, index = 0, source = {}) {
-  const normalizedSource = normalizeSourceConfig(source);
+  const normalizedSource = normalizeSourceConfig({
+    ...sourceFromRaw(raw),
+    ...source
+  });
   const title = stripTags(raw.title || '').slice(0, 36);
   const description = stripTags(raw.description || '来自上海公开活动信息，详情以来源页面为准。').slice(0, 96);
   const district = raw.district || normalizedSource.district || findDistrict(`${title} ${description}`);
@@ -353,7 +368,7 @@ function normalizeActivity(raw, index = 0, source = {}) {
 function dedupeActivities(items) {
   const seen = new Set();
   return items.filter((item) => {
-    const key = item.sourceUrl || item.id || item.title;
+    const key = item.dedupeKey || item.sourceUrl || item.id || item.title;
     if (seen.has(key)) {
       return false;
     }

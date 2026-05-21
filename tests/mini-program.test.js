@@ -323,6 +323,50 @@ test('activity sync normalizes and categorizes official activities', () => {
   assert.deepEqual(dedupeActivities([districtActivity, districtActivity]), [districtActivity]);
 });
 
+test('activity sync preserves raw source metadata when normalizing without source argument', () => {
+  const { normalizeActivity } = require('../cloudfunctions/hotspotApi/activity-sync.js');
+  const activity = normalizeActivity({
+    title: '浦东社区公益市集活动',
+    description: '免费市集，不用报名。',
+    sourceId: 'source-pudong-community',
+    sourceName: '浦东社区文化活动',
+    sourceType: 'community',
+    trustLevel: 'whitelist',
+    district: '浦东',
+    categoryHint: '本区热门'
+  }, 0);
+
+  assert.equal(activity.sourceId, 'source-pudong-community');
+  assert.equal(activity.sourceName, '浦东社区文化活动');
+  assert.equal(activity.sourceType, 'community');
+  assert.equal(activity.trustLevel, 'whitelist');
+  assert.equal(activity.status, 'published');
+  assert.equal(activity.district, '浦东');
+  assert.equal(activity.category, '本区热门');
+  assert.ok(activity.tags.includes('可信来源'));
+});
+
+test('activity sync dedupes activities by dedupe key before fallback fields', () => {
+  const { dedupeActivities } = require('../cloudfunctions/hotspotApi/activity-sync.js');
+  const first = {
+    id: 'remote-first',
+    title: '社区活动 A',
+    dedupeKey: 'text:same'
+  };
+  const second = {
+    id: 'remote-second',
+    title: '社区活动 B',
+    dedupeKey: 'text:same'
+  };
+  const third = {
+    id: 'remote-third',
+    title: '社区活动 C',
+    dedupeKey: 'text:other'
+  };
+
+  assert.deepEqual(dedupeActivities([first, second, third]), [first, third]);
+});
+
 test('activity sync can limit source count for quick cloud warm-up', async () => {
   const { syncActivities } = require('../cloudfunctions/hotspotApi/activity-sync.js');
   const calls = [];
