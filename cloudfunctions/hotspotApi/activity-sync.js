@@ -1,24 +1,7 @@
 const crypto = require('crypto');
 const http = require('http');
 const https = require('https');
-
-const SOURCE_CONFIGS = [
-  {
-    name: '上海国际服务门户',
-    url: 'https://english.shanghai.gov.cn/en-EventsCalendar/index.html',
-    categoryHint: '本市热门'
-  },
-  {
-    name: '上海国际服务门户',
-    url: 'https://english.shanghai.gov.cn/en-events1/index.html',
-    categoryHint: '本市热门'
-  },
-  {
-    name: '上海市文化和旅游局',
-    url: 'https://whlyj.sh.gov.cn/',
-    categoryHint: '本市热门'
-  }
-];
+const { SOURCE_CONFIGS, normalizeSourceConfig } = require('./source-configs.js');
 
 const DISTRICT_KEYWORDS = [
   ['浦东', ['pudong', '浦东']],
@@ -153,6 +136,7 @@ function looksLikeActivity(title, description = '') {
 function extractListItems(html, source) {
   const items = [];
   const listItems = html.match(/<li[\s\S]*?<\/li>/gi) || [];
+  const sourceMeta = sourceSnapshot(source);
 
   listItems.forEach((item) => {
     const anchor = item.match(/<a\b[\s\S]*?<\/a>/i);
@@ -177,7 +161,7 @@ function extractListItems(html, source) {
     items.push({
       title,
       description,
-      sourceName: source.name,
+      ...sourceMeta,
       sourceUrl: absoluteUrl(source.url, href),
       image: imageTag ? absoluteUrl(source.url, getAttribute(imageTag[0], 'src')) : '',
       categoryHint: source.categoryHint
@@ -193,13 +177,14 @@ function extractListItems(html, source) {
 
 function extractGenericAnchors(html, source) {
   const anchors = html.match(/<a\b[\s\S]*?<\/a>/gi) || [];
+  const sourceMeta = sourceSnapshot(source);
   return anchors.map((anchor) => {
     const href = getAttribute(anchor, 'href');
     const title = getAttribute(anchor, 'title') || stripTags(anchor);
     return {
       title,
       description: '',
-      sourceName: source.name,
+      ...sourceMeta,
       sourceUrl: absoluteUrl(source.url, href),
       image: '',
       categoryHint: source.categoryHint
@@ -209,6 +194,17 @@ function extractGenericAnchors(html, source) {
 
 function hashId(value) {
   return crypto.createHash('sha1').update(value).digest('hex').slice(0, 12);
+}
+
+function sourceSnapshot(source = {}) {
+  return {
+    sourceId: source.id || `source-${hashId(source.url || source.name || 'unknown')}`,
+    sourceName: source.name || '',
+    sourceType: source.sourceType || 'official',
+    trustLevel: source.trustLevel || 'review',
+    parserType: source.parserType || 'genericList',
+    sourceDistrict: source.district || ''
+  };
 }
 
 function findDistrict(text) {
@@ -263,28 +259,64 @@ function inferTimeLabel(text) {
   return '近期活动';
 }
 
-function normalizeActivity(raw, index = 0) {
+function normalizeForKey(value = '') {
+  return stripTags(value).toLowerCase().replace(/\s+/g, '');
+}
+
+function createDedupeKey(raw, district) {
+  if (raw.sourceUrl) {
+    return `url:${hashId(raw.sourceUrl)}`;
+  }
+  const title = normalizeForKey(raw.title);
+  const date = normalizeForKey(raw.rawDateText || raw.timeLabel || '');
+  const place = normalizeForKey(raw.place || district || '');
+  return `text:${hashId(`${title}|${date}|${place}`)}`;
+}
+
+function statusForSource(source) {
+  return source.trustLevel === 'whitelist' ? 'published' : 'pending';
+}
+
+function selectSources(sources, sourceIds, sourceLimit) {
+  const selectedIds = Array.isArray(sourceIds) && sourceIds.length > 0
+    ? new Set(sourceIds)
+    : null;
+  return sources
+    .map(normalizeSourceConfig)
+    .filter((source) => source.status === 'active')
+    .filter((source) => !selectedIds || selectedIds.has(source.id))
+    .slice(0, sourceLimit);
+}
+
+function normalizeActivity(raw, index = 0, source = {}) {
+  const normalizedSource = normalizeSourceConfig(source);
   const title = stripTags(raw.title || '').slice(0, 36);
-  const description = stripTags(raw.description || '来自上海官方/公共活动信息，详情以来源页面为准。').slice(0, 96);
-  const text = `${title} ${description}`;
-  const district = findDistrict(text);
-  const category = inferCategory(raw, district);
+  const description = stripTags(raw.description || '来自上海公开活动信息，详情以来源页面为准。').slice(0, 96);
+  const district = raw.district || normalizedSource.district || findDistrict(`${title} ${description}`);
+  const text = `${title} ${description} ${district}`;
+  const category = inferCategory({
+    ...raw,
+    categoryHint: raw.categoryHint || normalizedSource.categoryHint
+  }, district);
   const quietFriendly = /(展|艺术|gallery|museum|exhibition|公园|花园|阅读|文化)/i.test(text);
   const free = /(免费|free|open to all|公益)/i.test(text);
   const noSignup = /(不用报名|无需报名|无需预约|免预约|no registration|required no registration|walk.?in)/i.test(text)
     || !/(报名|预约|register|registration|reservation|booking)/i.test(text);
   const walkMinutes = category === '附近热门' ? 8 : category === '本区热门' ? 14 : 18;
+  const sourceName = raw.sourceName || normalizedSource.name || '';
+  const sourceUrl = raw.sourceUrl || '';
+  const now = new Date().toISOString();
 
   return {
-    id: `remote-${hashId(raw.sourceUrl || `${title}-${raw.sourceName}`)}`,
+    id: `remote-${hashId(sourceUrl || `${title}-${sourceName}`)}`,
     sortOrder: 1000 + index,
     title,
     bubble: inferBubble(title),
     walkMinutes,
-    timeLabel: inferTimeLabel(text),
+    timeLabel: inferTimeLabel(`${text} ${raw.rawDateText || ''}`),
     place: district ? `上海 · ${district}` : '上海',
     tags: [
-      '官方来源',
+      normalizedSource.trustLevel === 'whitelist' ? '可信来源' : '待确认',
       free ? '免费优先' : '查看详情',
       quietFriendly ? '适合慢逛' : '城市活动'
     ],
@@ -297,12 +329,24 @@ function normalizeActivity(raw, index = 0) {
     priceLabel: free ? '免费参加' : '查看详情',
     category,
     image: raw.image || '',
-    sourceName: raw.sourceName || '',
-    sourceUrl: raw.sourceUrl || '',
+    sourceName,
+    sourceUrl,
     district,
     mapX: 20 + (index % 4) * 18,
     mapY: 24 + (index % 5) * 12,
-    syncedAt: new Date().toISOString()
+    status: statusForSource(normalizedSource),
+    sourceId: normalizedSource.id,
+    sourceType: normalizedSource.sourceType,
+    trustLevel: normalizedSource.trustLevel,
+    dedupeKey: createDedupeKey({ ...raw, sourceUrl }, district),
+    rawTitle: stripTags(raw.title || ''),
+    rawSummary: stripTags(raw.description || ''),
+    rawDateText: raw.rawDateText || '',
+    startAt: raw.startAt || '',
+    endAt: raw.endAt || '',
+    lastSeenAt: now,
+    reviewNote: '',
+    syncedAt: now
   };
 }
 
@@ -325,23 +369,34 @@ async function syncActivities(options = {}) {
     fetchTimeout = 12000,
     writeActivity,
     limit = 30,
-    sourceLimit = sources.length
+    sourceLimit = sources.length,
+    sourceIds
   } = options;
+  const activeSources = selectSources(sources, sourceIds, sourceLimit);
   const sourceResults = [];
   const rawItems = [];
 
-  for (const source of sources.slice(0, sourceLimit)) {
+  for (const source of activeSources) {
     try {
       const html = await fetcher(source.url, { source, timeout: fetchTimeout });
-      const items = extractListItems(html, source);
+      const items = extractListItems(html, source).map((item) => ({
+        ...item,
+        sourceId: source.id,
+        sourceType: source.sourceType,
+        trustLevel: source.trustLevel,
+        district: item.district || source.district,
+        categoryHint: item.categoryHint || source.categoryHint
+      }));
       sourceResults.push({
+        sourceId: source.id,
         name: source.name,
         url: source.url,
         count: items.length
       });
-      rawItems.push(...items);
+      rawItems.push(...items.map((item) => ({ item, source })));
     } catch (error) {
       sourceResults.push({
+        sourceId: source.id,
         name: source.name,
         url: source.url,
         count: 0,
@@ -350,14 +405,25 @@ async function syncActivities(options = {}) {
     }
   }
 
-  const items = dedupeActivities(rawItems)
-    .slice(0, limit)
-    .map((item, index) => normalizeActivity(item, index));
+  const seen = new Set();
+  const normalizedItems = [];
+  for (const pair of rawItems) {
+    const normalized = normalizeActivity(pair.item, normalizedItems.length, pair.source);
+    const key = normalized.dedupeKey || normalized.sourceUrl || normalized.id;
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    normalizedItems.push(normalized);
+    if (normalizedItems.length >= limit) {
+      break;
+    }
+  }
 
   const writeErrors = [];
 
   if (writeActivity) {
-    for (const item of items) {
+    for (const item of normalizedItems) {
       try {
         await writeActivity(item);
       } catch (error) {
@@ -370,23 +436,34 @@ async function syncActivities(options = {}) {
     }
   }
 
+  const publishedCount = normalizedItems.filter((item) => item.status === 'published').length;
+  const pendingCount = normalizedItems.filter((item) => item.status === 'pending').length;
+  const errorCount = sourceResults.filter((source) => source.error).length;
+
   return {
-    synced: items.length,
-    skipped: Math.max(rawItems.length - items.length, 0),
+    synced: normalizedItems.length,
+    skipped: Math.max(rawItems.length - normalizedItems.length, 0),
+    sourceCount: activeSources.length,
+    fetchedCount: rawItems.length,
+    publishedCount,
+    pendingCount,
+    errorCount,
     sources: sourceResults,
     writeErrors,
-    items
+    items: normalizedItems
   };
 }
 
 module.exports = {
   SOURCE_CONFIGS,
   absoluteUrl,
+  createDedupeKey,
   decodeHtml,
   dedupeActivities,
   extractListItems,
   fetchText,
   normalizeActivity,
+  selectSources,
   stripTags,
   syncActivities
 };

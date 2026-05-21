@@ -281,6 +281,14 @@ test('activity sync parses official Shanghai event list pages', () => {
 
 test('activity sync normalizes and categorizes official activities', () => {
   const { dedupeActivities, normalizeActivity } = require('../cloudfunctions/hotspotApi/activity-sync.js');
+  const officialSource = {
+    id: 'source-shanghai-official',
+    name: '上海国际服务门户',
+    sourceType: 'official',
+    trustLevel: 'whitelist',
+    status: 'active',
+    categoryHint: '本市热门'
+  };
   const districtActivity = normalizeActivity({
     title: 'Jiading district weekend cultural market',
     description: 'A relaxed public event in Jiading district for local residents.',
@@ -288,27 +296,27 @@ test('activity sync normalizes and categorizes official activities', () => {
     sourceUrl: 'https://english.shanghai.gov.cn/en-events1/jiading.html',
     categoryHint: '本市热门',
     image: 'https://english.shanghai.gov.cn/cmsres/jiading.jpg'
-  }, 0);
+  }, 0, officialSource);
   const cityActivity = normalizeActivity({
     title: 'Sporting events, exhibitions & performances in May',
     description: 'Shanghai has exhibitions and performances across the city.',
     sourceName: '上海国际服务门户',
     sourceUrl: 'https://english.shanghai.gov.cn/en-EventsCalendar/may.html',
     categoryHint: '本市热门'
-  }, 1);
+  }, 1, officialSource);
   const nearActivity = normalizeActivity({
     title: '社区公园露天电影',
     description: '附近社区今晚开放，不用报名。',
     sourceName: '上海市文化和旅游局',
     sourceUrl: 'https://whlyj.sh.gov.cn/movie.html',
     categoryHint: '本市热门'
-  }, 2);
+  }, 2, officialSource);
 
   assert.match(districtActivity.id, /^remote-/);
   assert.equal(districtActivity.category, '本区热门');
   assert.equal(districtActivity.district, '嘉定');
   assert.equal(districtActivity.sourceName, '上海国际服务门户');
-  assert.ok(districtActivity.tags.includes('官方来源'));
+  assert.ok(districtActivity.tags.includes('可信来源'));
   assert.equal(cityActivity.category, '本市热门');
   assert.equal(nearActivity.category, '附近热门');
   assert.equal(nearActivity.noSignup, true);
@@ -340,6 +348,95 @@ test('activity sync can limit source count for quick cloud warm-up', async () =>
   assert.deepEqual(calls, [{ url: 'https://example.com/a', timeout: 1800 }]);
   assert.equal(result.synced, 1);
   assert.equal(result.items[0].category, '本市热门');
+});
+
+test('activity sync filters sources and assigns review status from source trust', async () => {
+  const { syncActivities } = require('../cloudfunctions/hotspotApi/activity-sync.js');
+  const written = [];
+  const sources = [
+    {
+      id: 'source-official',
+      name: '徐汇文化馆',
+      district: '徐汇',
+      sourceType: 'official',
+      url: 'https://example.com/xuhui',
+      categoryHint: '本区热门',
+      trustLevel: 'whitelist',
+      status: 'active'
+    },
+    {
+      id: 'source-venue',
+      name: '民营剧场',
+      district: '黄浦',
+      sourceType: 'venue',
+      url: 'https://example.com/venue',
+      categoryHint: '本区热门',
+      trustLevel: 'review',
+      status: 'active'
+    }
+  ];
+
+  const result = await syncActivities({
+    sources,
+    sourceIds: ['source-venue'],
+    fetcher(url) {
+      return Promise.resolve(`
+        <li>
+          <a href="/show.html" title="黄浦社区周末音乐活动">
+            <p class="detail">民营剧场开放日，需查看详情。</p>
+          </a>
+        </li>`);
+    },
+    writeActivity(activity) {
+      written.push(activity);
+      return Promise.resolve();
+    }
+  });
+
+  assert.equal(result.synced, 1);
+  assert.equal(result.sources.length, 1);
+  assert.equal(result.sources[0].sourceId, 'source-venue');
+  assert.equal(written[0].sourceId, 'source-venue');
+  assert.equal(written[0].sourceType, 'venue');
+  assert.equal(written[0].trustLevel, 'review');
+  assert.equal(written[0].status, 'pending');
+  assert.match(written[0].dedupeKey, /^url:/);
+  assert.equal(written[0].rawTitle, '黄浦社区周末音乐活动');
+  assert.equal(written[0].district, '黄浦');
+});
+
+test('activity sync publishes whitelist source items and reports counters', async () => {
+  const { syncActivities } = require('../cloudfunctions/hotspotApi/activity-sync.js');
+  const result = await syncActivities({
+    sources: [
+      {
+        id: 'source-official',
+        name: '浦东文化活动',
+        district: '浦东',
+        sourceType: 'community',
+        url: 'https://example.com/pudong',
+        categoryHint: '本区热门',
+        trustLevel: 'whitelist',
+        status: 'active'
+      }
+    ],
+    fetcher() {
+      return Promise.resolve(`
+        <li>
+          <a href="/market.html" title="浦东社区公益市集活动">
+            <p class="detail">免费市集，不用报名。</p>
+          </a>
+        </li>`);
+    }
+  });
+
+  assert.equal(result.synced, 1);
+  assert.equal(result.publishedCount, 1);
+  assert.equal(result.pendingCount, 0);
+  assert.equal(result.errorCount, 0);
+  assert.equal(result.items[0].status, 'published');
+  assert.equal(result.items[0].sourceId, 'source-official');
+  assert.equal(result.items[0].place, '上海 · 浦东');
 });
 
 test('activity sync keeps fetched items when database writes fail', async () => {
