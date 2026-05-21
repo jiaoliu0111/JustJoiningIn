@@ -1,8 +1,9 @@
 {
-  "appid": "wx6a2a4227925d818d",
+  "appid": "wx1b318b892fbeb12c",
   "projectname": "JustJoiningIn",
   "compileType": "miniprogram",
-  "libVersion": "latest",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "libVersion": "3.15.2",
   "setting": {
     "urlCheck": false,
     "es6": true,
@@ -34,5 +35,6 @@
     "ignore": [],
     "include": []
   },
-  "editorSetting": {}
+  "editorSetting": {},
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/"
 }

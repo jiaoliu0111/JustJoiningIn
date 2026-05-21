@@ -1,19 +1,3 @@
-const mock = require('../data/mock.js');
-
-const collections = {
-  moment: mock.nearbyMoments,
-  reason: mock.reasonCards,
-  route: mock.routes,
-};
-
-function findDetail(type, id) {
-  const list = collections[type];
-  if (!list) {
-    return null;
-  }
-  return list.find((item) => item.id === id) || null;
-}
-
 function detailTitle(type) {
   return {
     moment: '附近小热闹',
@@ -27,7 +11,6 @@ function joinTags(tags) {
 }
 
 module.exports = {
-  findDetail,
   detailTitle,
   joinTags
 };

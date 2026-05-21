@@ -1,52 +1,68 @@
-const mock = require('../../data/mock.js');
+const hotspotService = require('../../services/hotspot.js');
 
 const filters = [
-  { id: 'free', label: '免费' },
-  { id: 'near', label: '步行 10 分钟内' },
-  { id: 'now', label: '现在开始' },
-  { id: 'nosignup', label: '不用报名' },
-  { id: 'passby', label: '路过看看' },
-  { id: 'quiet', label: '安静友好' }
+  { id: 'city', label: '本市热门' },
+  { id: 'district', label: '本区热门' },
+  { id: 'nearby', label: '附近热门' }
 ];
-
-function toCards() {
-  return [
-    ...mock.nearbyMoments.map((item) => ({ ...item, cardType: 'moment', badge: item.bubble, displayTime: item.timeLabel, displayPlace: item.place })),
-    ...mock.routes.map((item) => ({ ...item, cardType: 'route', badge: '顺路路线', displayTime: item.duration, displayPlace: item.difficulty, walkMinutes: Math.round(item.distance * 6) }))
-  ];
-}
 
 function matches(card, activeFilter) {
   if (!activeFilter) {
     return true;
   }
-  if (activeFilter === 'free') {
-    return card.free === true || (card.tags || []).includes('免费');
+  if (activeFilter === 'city') {
+    return card.category === '本市热门' || card.free === true;
   }
-  if (activeFilter === 'near') {
-    return card.walkMinutes <= 10;
+  if (activeFilter === 'district') {
+    return card.category === '本区热门' || card.walkMinutes <= 12;
   }
-  if (activeFilter === 'now') {
-    return /现在|正在/.test(card.timeLabel || card.displayTime || '');
-  }
-  if (activeFilter === 'nosignup') {
-    return card.noSignup === true || (card.tags || []).includes('不用报名');
-  }
-  if (activeFilter === 'passby') {
-    return (card.tags || []).includes('路过看看也行') || (card.tags || []).includes('看看就行');
-  }
-  if (activeFilter === 'quiet') {
-    return card.quietFriendly === true || (card.tags || []).includes('安静友好');
+  if (activeFilter === 'nearby') {
+    return card.category === '附近热门' || card.walkMinutes <= 10;
   }
   return true;
+}
+
+function filterLabel(id) {
+  const filter = filters.find((item) => item.id === id);
+  return filter ? filter.label : '热闹';
 }
 
 Page({
   data: {
     filters,
-    activeFilter: '',
-    cards: toCards(),
-    visibleCards: toCards()
+    activeFilter: 'city',
+    activeFilterLabel: '本市热门',
+    cards: [],
+    visibleCards: [],
+    loading: true,
+    errorText: ''
+  },
+
+  onLoad() {
+    this.loadBrowseData();
+  },
+
+  loadBrowseData() {
+    this.setData({
+      loading: true,
+      errorText: ''
+    });
+
+    hotspotService.getBrowseData({
+      city: '上海'
+    }).then((data) => {
+      const cards = data.cards || [];
+      this.setData({
+        cards,
+        visibleCards: cards.filter((card) => matches(card, this.data.activeFilter)),
+        loading: false
+      });
+    }).catch(() => {
+      this.setData({
+        loading: false,
+        errorText: '附近热闹暂时加载失败'
+      });
+    });
   },
 
   selectFilter(event) {
@@ -54,6 +70,7 @@ Page({
     const activeFilter = this.data.activeFilter === id ? '' : id;
     this.setData({
       activeFilter,
+      activeFilterLabel: filterLabel(activeFilter),
       visibleCards: this.data.cards.filter((card) => matches(card, activeFilter))
     });
   },

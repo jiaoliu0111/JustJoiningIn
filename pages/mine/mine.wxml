@@ -1,64 +1,38 @@
-<view class="page">
-  <view class="mine-head card card-pad">
-    <view class="avatar">凑</view>
-    <view>
-      <view class="item-title">周末轻装用户</view>
-      <view class="item-desc">只找附近、免费、马上能去的小热闹。</view>
+<view class="page mine-page">
+  <view class="brand-bar">
+    <view class="brand-mark">⌘</view>
+    <text>Join the Fun</text>
+    <text class="brand-bell">⌂</text>
+  </view>
+
+  <view class="profile-hero">
+    <image class="profile-illustration" src="/assets/events/cat.png" mode="aspectFill" />
+    <view class="profile-title">欢迎来到个人中心</view>
+    <view class="profile-desc">登录后开启你的漫步日志吧</view>
+    <view class="primary-btn login-btn">立即登录 / 注册</view>
+  </view>
+
+  <view class="mine-menu">
+    <view class="menu-card">
+      <view class="menu-icon heart">♡</view>
+      <view class="menu-copy">
+        <view class="item-title">我的收藏</view>
+        <view class="item-desc">保存你喜欢的活动与地点</view>
+      </view>
+      <view class="menu-arrow">›</view>
+    </view>
+    <view class="menu-card">
+      <view class="menu-icon note">▣</view>
+      <view class="menu-copy">
+        <view class="item-title">我的日志</view>
+        <view class="item-desc">记录每一次出发的回忆</view>
+      </view>
+      <view class="menu-arrow">›</view>
     </view>
   </view>
 
-  <view class="section card card-pad">
-    <view class="section-title">
-      <text>步行范围</text>
-    </view>
-    <view class="item-desc">走太远就不像顺路了，先看近的。</view>
-    <view class="distance-row">
-      <view
-        wx:for="{{walkMinutes}}"
-        wx:key="*this"
-        class="distance-chip {{preferences.walkMinutes === item ? 'active' : ''}}"
-        data-value="{{item}}"
-        bindtap="selectWalkMinutes"
-      >
-        {{item}} 分钟
-      </view>
-    </view>
-  </view>
-
-  <view class="section card card-pad">
-    <view class="section-title">
-      <text>发现偏好</text>
-    </view>
-    <view class="pref-row">
-      <view>
-        <view class="item-title">只看免费</view>
-        <view class="item-desc">没有消费压力，看看也行。</view>
-      </view>
-      <switch checked="{{preferences.freeOnly}}" color="#ff8a3d" data-key="freeOnly" bindchange="togglePreference" />
-    </view>
-    <view class="pref-row">
-      <view>
-        <view class="item-title">不用报名优先</view>
-        <view class="item-desc">到了再说，不先做承诺。</view>
-      </view>
-      <switch checked="{{preferences.noSignupFirst}}" color="#ff8a3d" data-key="noSignupFirst" bindchange="togglePreference" />
-    </view>
-    <view class="pref-row">
-      <view>
-        <view class="item-title">安静路过友好</view>
-        <view class="item-desc">不用硬聊，不用参与很久。</view>
-      </view>
-      <switch checked="{{preferences.quietFriendly}}" color="#ff8a3d" data-key="quietFriendly" bindchange="togglePreference" />
-    </view>
-  </view>
-
-  <view class="section card card-pad">
-    <view class="section-title">
-      <text>极简出门清单</text>
-    </view>
-    <view class="check-item" wx:for="{{checklist}}" wx:key="*this">
-      <text class="check-dot"></text>
-      <text>{{item}}</text>
-    </view>
+  <view class="mine-links">
+    <text>帮助中心</text>
+    <text>设置</text>
   </view>
 </view>

@@ -1,20 +1,23 @@
-const mock = require('../../data/mock.js');
+const hotspotService = require('../../services/hotspot.js');
 const { formatHomeClock } = require('../../utils/time.js');
 
 Page({
   data: {
-    moments: mock.nearbyMoments,
-    featuredMoments: mock.nearbyMoments.slice(0, 3),
-    routes: mock.routes.slice(0, 2),
-    reasons: mock.reasonCards,
-    checklist: mock.checklist,
+    moments: [],
+    featuredMoments: [],
+    routes: [],
+    reasons: [],
+    checklist: [],
     currentDate: '',
     currentWeekday: '',
-    currentTime: ''
+    currentTime: '',
+    loading: true,
+    errorText: ''
   },
 
   onLoad() {
     this.updateClock();
+    this.loadHomeData();
   },
 
   onShow() {
@@ -46,6 +49,34 @@ Page({
       clearInterval(this.clockTimer);
       this.clockTimer = null;
     }
+  },
+
+  loadHomeData() {
+    this.setData({
+      loading: true,
+      errorText: ''
+    });
+
+    hotspotService.getHomeData({
+      city: '上海',
+      radiusKm: 3
+    }).then((data) => {
+      const moments = data.moments || [];
+      const routes = data.routes || [];
+      this.setData({
+        moments,
+        featuredMoments: data.featuredMoments || moments.slice(0, 3),
+        routes: routes.slice(0, 2),
+        reasons: data.reasons || [],
+        checklist: data.checklist || [],
+        loading: false
+      });
+    }).catch(() => {
+      this.setData({
+        loading: false,
+        errorText: '附近小热闹暂时加载失败'
+      });
+    });
   },
 
   goReason() {

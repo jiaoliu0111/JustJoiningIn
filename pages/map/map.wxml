@@ -1,0 +1,45 @@
+<view class="page map-page">
+  <view class="brand-bar">
+    <view class="brand-mark">⌘</view>
+    <text>Join the Fun</text>
+    <text class="brand-bell">⌂</text>
+  </view>
+
+  <view class="map-stage">
+    <view class="map-water"></view>
+    <view class="map-road road-one"></view>
+    <view class="map-road road-two"></view>
+    <view class="map-road road-three"></view>
+    <view class="map-center">我</view>
+    <block wx:for="{{moments}}" wx:key="id">
+      <view
+        class="map-marker marker-{{item.color}}"
+        style="left: {{item.mapX}}%; top: {{item.mapY}}%;"
+        data-id="{{item.id}}"
+        bindtap="selectMoment"
+      >
+        <view class="marker-dot"></view>
+        <text>{{item.bubble}}</text>
+      </view>
+    </block>
+  </view>
+
+  <view class="card card-pad map-card" wx:if="{{selectedMoment}}">
+    <view class="map-card-top">
+      <view>
+        <view class="item-title">{{selectedMoment.title}}</view>
+        <view class="item-desc">步行 {{selectedMoment.walkMinutes}} 分钟 · {{selectedMoment.timeLabel}}</view>
+      </view>
+      <view class="price-chip">{{selectedMoment.priceLabel}}</view>
+    </view>
+    <view class="tag-row">
+      <text class="tag" wx:for="{{selectedMoment.tags}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="primary-btn map-action" bindtap="openSelected">查看详情</view>
+  </view>
+
+  <view class="card card-pad" wx:if="{{errorText}}">
+    <view class="item-title">地图加载失败</view>
+    <view class="item-desc">{{errorText}}</view>
+  </view>
+</view>

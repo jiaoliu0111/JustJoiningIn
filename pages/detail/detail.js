@@ -1,5 +1,5 @@
-const mock = require('../../data/mock.js');
-const { findDetail, detailTitle } = require('../../utils/format.js');
+const hotspotService = require('../../services/hotspot.js');
+const { detailTitle } = require('../../utils/format.js');
 
 Page({
   data: {
@@ -7,35 +7,43 @@ Page({
     detail: null,
     title: '详情',
     primaryText: '去这里凑热闹',
-    meta: []
+    meta: [],
+    loading: true,
+    errorText: ''
   },
 
   onLoad(options) {
     const type = options.type || '';
-    let detail = findDetail(type, options.id);
-    if (type === 'reason' && detail) {
-      const moment = mock.nearbyMoments.find((item) => item.id === detail.momentId);
-      detail = {
-        ...detail,
-        linkedMoment: moment,
-        tags: moment ? moment.tags : [],
-        description: moment ? moment.description : detail.subtitle,
-        place: moment ? moment.place : '',
-        walkMinutes: moment ? moment.walkMinutes : '',
-        timeLabel: moment ? moment.timeLabel : '',
-        lowPressureNote: moment ? moment.lowPressureNote : ''
-      };
-    }
     const title = detailTitle(type);
     this.setData({
       type,
-      detail,
       title,
-      primaryText: this.primaryText(type),
-      meta: this.buildMeta(type, detail)
+      primaryText: this.primaryText(type)
     });
     wx.setNavigationBarTitle({
       title
+    });
+    this.loadDetail(type, options.id);
+  },
+
+  loadDetail(type, id) {
+    this.setData({
+      loading: true,
+      errorText: ''
+    });
+
+    hotspotService.getDetail(type, id).then((detail) => {
+      this.setData({
+        detail,
+        meta: this.buildMeta(type, detail),
+        loading: false
+      });
+    }).catch(() => {
+      this.setData({
+        detail: null,
+        loading: false,
+        errorText: '详情暂时加载失败'
+      });
     });
   },
 

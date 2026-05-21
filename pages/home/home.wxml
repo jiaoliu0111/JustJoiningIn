@@ -1,108 +1,52 @@
 <view class="page home-page">
-  <view class="hero">
-    <view class="hero-timebar">
-      <view class="hero-date">
-        <text class="hero-city">上海 · 附近小热闹</text>
-        <text class="hero-date-line">{{currentDate}} · {{currentWeekday}}</text>
-      </view>
-      <view class="hero-time-pill">
-        <text class="hero-time">{{currentTime}}</text>
-        <text class="hero-range">附近 3km</text>
-      </view>
-    </view>
-    <view class="hero-title">附近刚好有点小热闹</view>
-    <view class="hero-subtitle">免费、近、马上能去。不用约人，也不用报名，路过看看就行。</view>
-    <view class="search-pill">附近有什么免费小热闹？</view>
-    <view class="tag-row">
-      <text class="tag">免费优先</text>
-      <text class="tag green">步行可达</text>
-      <text class="tag blue">不用社交硬聊</text>
-    </view>
+  <view class="brand-bar">
+    <view class="brand-mark">⌘</view>
+    <text>Join the Fun</text>
+    <text class="brand-bell">⌂</text>
   </view>
 
-  <view class="soft-reminder card card-pad">
-    <view>
-      <view class="item-title">街角免费咖啡正在试饮</view>
-      <view class="item-desc">步行 6 分钟，现在开始，不用报名，拿一杯就走。</view>
+  <view class="clock-card">
+    <view class="clock-top">
+      <text>{{currentWeekday}}</text>
+      <text class="clock-date">{{currentDate}}</text>
     </view>
-    <view class="reminder-dot"></view>
+    <view class="clock-time">{{currentTime}}</view>
+    <view class="clock-caption">祝你有美好的一天</view>
   </view>
 
-  <view class="primary-btn instant-btn" bindtap="goReason">给我一个出门理由</view>
+  <view class="daily-card card card-pad">
+    <view class="daily-chip">♥ 每日温柔提醒</view>
+    <view class="daily-title">今天也要 对自己好一点</view>
+    <view class="daily-desc">在这个快节奏的世界里，别忘了停下来，给自己的心灵一个大大的拥抱。</view>
+    <view class="primary-btn daily-action" bindtap="goBustle">开启美好一天</view>
+    <image class="daily-image" src="/assets/events/cat.png" mode="aspectFill" />
+  </view>
 
-  <view class="section">
-    <view class="section-title">
-      <text>附近地图气泡</text>
-      <text class="section-more" bindtap="goBustle">全部</text>
+  <view class="hot-card" bindtap="goBustle">
+    <view class="hot-icon">
+      <view class="hot-icon-core"></view>
     </view>
-    <view class="map-card card">
-      <view class="map-river"></view>
-      <view class="map-road road-a"></view>
-      <view class="map-road road-b"></view>
-      <block wx:for="{{moments}}" wx:key="id">
-        <view class="map-pin pin-{{index}} {{item.color}}" data-type="moment" data-id="{{item.id}}" bindtap="openDetail">
-          <view class="pin-core"></view>
-          <text>{{item.bubble}}</text>
-        </view>
-      </block>
-    </view>
+    <view class="hot-title">本市热门</view>
+    <view class="hot-desc">查看大家都在逛哪里</view>
+    <view class="hot-arrow">→</view>
   </view>
 
   <view class="section">
-    <view class="section-title">
-      <text>现在能去的小热闹</text>
-      <text class="section-more" bindtap="goBustle">更多</text>
+    <view class="section-title">发现生活中的小确幸</view>
+    <view class="home-copy">
+      不论是清晨的一杯热茶，还是路边的一朵野花，都是大自然给你的小惊喜。记录下这些瞬间，让美好在心中流淌。
     </view>
-    <block wx:for="{{featuredMoments}}" wx:key="id">
-      <view class="card card-pad list-item" data-type="moment" data-id="{{item.id}}" bindtap="openDetail">
-        <view>
-          <view class="item-title">{{item.title}}</view>
-          <view class="item-desc">步行 {{item.walkMinutes}} 分钟 · {{item.timeLabel}} · {{item.lowPressureNote}}</view>
-          <view class="tag-row">
-            <text class="tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
-          </view>
-        </view>
-        <view class="join-chip">{{item.walkMinutes}}′</view>
+    <view class="habit-list">
+      <view class="habit-item" wx:for="{{checklist}}" wx:key="*this">
+        <text class="habit-check">✓</text>
+        <text>{{item}}</text>
       </view>
-    </block>
+    </view>
+    <image class="landscape-image" src="/assets/events/park.png" mode="aspectFill" />
   </view>
 
-  <view class="section">
-    <view class="section-title">
-      <text>出门理由</text>
-      <text class="section-more" bindtap="goReason">换一个</text>
-    </view>
-    <block wx:for="{{reasons}}" wx:key="id">
-      <view class="card card-pad" data-type="reason" data-id="{{item.id}}" bindtap="openDetail">
-        <view class="tiny">低压力理由</view>
-        <view class="item-title">{{item.title}}</view>
-        <view class="item-desc">{{item.subtitle}}</view>
-      </view>
-    </block>
-  </view>
-
-  <view class="section">
-    <view class="section-title">
-      <text>现成放空路线</text>
-    </view>
-    <view class="two-col">
-      <block wx:for="{{routes}}" wx:key="id">
-        <view class="route-card card card-pad" data-type="route" data-id="{{item.id}}" bindtap="openDetail">
-          <view class="route-time">{{item.duration}}</view>
-          <view class="item-title">{{item.title}}</view>
-          <view class="item-desc">{{item.difficulty}} · {{item.distance}}km</view>
-        </view>
-      </block>
-    </view>
-  </view>
-
-  <view class="section checklist card card-pad">
-    <view class="section-title">
-      <text>出门只要三件事</text>
-    </view>
-    <view class="check-item" wx:for="{{checklist}}" wx:key="*this">
-      <text class="check-dot"></text>
-      <text>{{item}}</text>
-    </view>
+  <view class="card card-pad empty-state" wx:if="{{errorText}}">
+    <view class="item-title">今天的推荐暂时没加载出来</view>
+    <view class="item-desc">{{errorText}}</view>
   </view>
 </view>

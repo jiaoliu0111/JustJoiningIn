@@ -2,38 +2,48 @@
   "pages": [
     "pages/home/home",
     "pages/bustle/bustle",
+    "pages/map/map",
     "pages/group/group",
     "pages/mine/mine",
     "pages/detail/detail"
   ],
   "window": {
-    "navigationBarTitleText": "凑热闹",
-    "navigationBarBackgroundColor": "#fff7df",
+    "navigationBarTitleText": "Join the Fun",
+    "navigationBarBackgroundColor": "#f3faf8",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#fff8ea",
-    "backgroundTextStyle": "dark"
+    "backgroundColor": "#f3faf8",
+    "backgroundTextStyle": "dark",
+    "navigationStyle": "custom"
   },
   "tabBar": {
-    "color": "#9b8f78",
-    "selectedColor": "#f6a400",
-    "backgroundColor": "#fffdf6",
+    "color": "#687b77",
+    "selectedColor": "#007968",
+    "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/home/home",
-        "text": "首页"
+        "text": "首页",
+        "iconPath": "assets/tabbar/house.png",
+        "selectedIconPath": "assets/tabbar/house-active.png"
       },
       {
         "pagePath": "pages/bustle/bustle",
-        "text": "热闹"
+        "text": "热闹",
+        "iconPath": "assets/tabbar/bustle.png",
+        "selectedIconPath": "assets/tabbar/bustle-active.png"
       },
       {
-        "pagePath": "pages/group/group",
-        "text": "理由"
+        "pagePath": "pages/map/map",
+        "text": "地图",
+        "iconPath": "assets/tabbar/map.png",
+        "selectedIconPath": "assets/tabbar/map-active.png"
       },
       {
         "pagePath": "pages/mine/mine",
-        "text": "我的"
+        "text": "我的",
+        "iconPath": "assets/tabbar/mine.png",
+        "selectedIconPath": "assets/tabbar/mine-active.png"
       }
     ]
   },

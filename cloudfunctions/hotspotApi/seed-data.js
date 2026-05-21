@@ -1,6 +1,7 @@
-const nearbyMoments = [
+const moments = [
   {
     id: 'moment-coffee',
+    sortOrder: 10,
     title: '街角免费咖啡试饮',
     bubble: '免费咖啡',
     walkMinutes: 6,
@@ -12,10 +13,16 @@ const nearbyMoments = [
     noSignup: true,
     quietFriendly: true,
     lowPressureNote: '拿一杯就走，不尴尬。',
-    color: 'orange'
+    color: 'mint',
+    priceLabel: '¥19 起',
+    category: '本市热门',
+    image: '/assets/events/summer.png',
+    mapX: 30,
+    mapY: 34
   },
   {
     id: 'moment-guitar',
+    sortOrder: 20,
     title: '草坪吉他小演出',
     bubble: '草坪吉他',
     walkMinutes: 8,
@@ -27,10 +34,16 @@ const nearbyMoments = [
     noSignup: true,
     quietFriendly: true,
     lowPressureNote: '站在边上听一会儿就好。',
-    color: 'green'
+    color: 'green',
+    priceLabel: '免费参加',
+    category: '附近热门',
+    image: '/assets/events/studio.png',
+    mapX: 64,
+    mapY: 28
   },
   {
     id: 'moment-books',
+    sortOrder: 30,
     title: '旧书交换小桌',
     bubble: '旧书交换',
     walkMinutes: 9,
@@ -42,10 +55,16 @@ const nearbyMoments = [
     noSignup: true,
     quietFriendly: true,
     lowPressureNote: '翻两页就走也自然。',
-    color: 'orange'
+    color: 'mint',
+    priceLabel: '免费参加',
+    category: '本区热门',
+    image: '/assets/events/bookshop.png',
+    mapX: 46,
+    mapY: 55
   },
   {
     id: 'moment-craft',
+    sortOrder: 40,
     title: '社区手作体验摊',
     bubble: '手作体验',
     walkMinutes: 12,
@@ -57,10 +76,16 @@ const nearbyMoments = [
     noSignup: true,
     quietFriendly: false,
     lowPressureNote: '看别人做也算凑过热闹。',
-    color: 'green'
+    color: 'green',
+    priceLabel: '免费参加',
+    category: '附近热门',
+    image: '/assets/events/gallery.png',
+    mapX: 70,
+    mapY: 68
   },
   {
     id: 'moment-adoption',
+    sortOrder: 50,
     title: '宠物领养日',
     bubble: '宠物领养',
     walkMinutes: 10,
@@ -72,13 +97,19 @@ const nearbyMoments = [
     noSignup: true,
     quietFriendly: true,
     lowPressureNote: '只看一眼也很治愈。',
-    color: 'tomato'
+    color: 'peach',
+    priceLabel: '免费参加',
+    category: '本市热门',
+    image: '/assets/events/cat.png',
+    mapX: 24,
+    mapY: 66
   }
 ];
 
-const reasonCards = [
+const reasons = [
   {
     id: 'reason-nearest',
+    sortOrder: 10,
     title: '最近的免费理由',
     subtitle: '6 分钟走到街角，拿一杯试饮咖啡。',
     momentId: 'moment-coffee',
@@ -86,6 +117,7 @@ const reasonCards = [
   },
   {
     id: 'reason-quiet',
+    sortOrder: 20,
     title: '不需要说话的理由',
     subtitle: '去草坪边听一首歌，站着也行。',
     momentId: 'moment-guitar',
@@ -93,6 +125,7 @@ const reasonCards = [
   },
   {
     id: 'reason-indoor',
+    sortOrder: 30,
     title: '不晒太阳的理由',
     subtitle: '商场中庭有宠物领养日，看看就能回。',
     momentId: 'moment-adoption',
@@ -103,6 +136,7 @@ const reasonCards = [
 const routes = [
   {
     id: 'route-corner',
+    sortOrder: 10,
     title: '咖啡车到书店门口',
     duration: '35 分钟',
     distance: 1.4,
@@ -113,6 +147,7 @@ const routes = [
   },
   {
     id: 'route-grass',
+    sortOrder: 20,
     title: '草坪音乐绕一圈',
     duration: '45 分钟',
     distance: 1.8,
@@ -123,6 +158,7 @@ const routes = [
   },
   {
     id: 'route-mall',
+    sortOrder: 30,
     title: '商场中庭短暂停留',
     duration: '30 分钟',
     distance: 1.2,
@@ -134,6 +170,7 @@ const routes = [
 ];
 
 const preferences = {
+  id: 'preferences',
   freeOnly: true,
   walkMinutes: 10,
   noSignupFirst: true,
@@ -144,8 +181,8 @@ const preferences = {
 const checklist = ['穿舒服的鞋', '带水杯', '轻装出行'];
 
 module.exports = {
-  nearbyMoments,
-  reasonCards,
+  moments,
+  reasons,
   routes,
   preferences,
   checklist

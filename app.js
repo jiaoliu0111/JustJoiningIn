@@ -1,3 +1,5 @@
+const cloudConfig = require('./config/cloud.js');
+
 App({
   globalData: {
     activeReason: null,
@@ -7,6 +9,18 @@ App({
       noSignupFirst: true,
       quietFriendly: true,
       gentleReminder: true
+    }
+  },
+
+  onLaunch() {
+    if (wx.cloud) {
+      const options = {
+        traceUser: true
+      };
+      if (cloudConfig.envId) {
+        options.env = cloudConfig.envId;
+      }
+      wx.cloud.init(options);
     }
   },
 
