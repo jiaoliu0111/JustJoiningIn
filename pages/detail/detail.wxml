@@ -1,44 +1,29 @@
 <view class="page detail-page" wx:if="{{detail}}">
   <view class="detail-hero card card-pad">
-    <view class="tiny">{{title}}</view>
     <view class="detail-title">{{detail.title}}</view>
-    <view class="item-desc">{{detail.description}}</view>
-    <view class="tag-row">
-      <text class="tag" wx:for="{{detail.tags}}" wx:key="*this">{{item}}</text>
-    </view>
+    <view class="item-desc">{{detail.sourceName}}</view>
   </view>
 
-  <view class="section card card-pad">
-    <view class="section-title">
-      <text>一眼信息</text>
-    </view>
-    <view class="info-grid">
-      <view class="info-item" wx:for="{{meta}}" wx:key="*this">
-        <text>{{item}}</text>
+  <view class="article-card">
+    <image wx:if="{{detail.image}}" class="detail-image" src="{{detail.image}}" mode="aspectFill" />
+    <view wx:if="{{loading && (!detail.contentNodes || !detail.contentNodes.length)}}" class="detail-loading-card card card-pad">
+      <view class="loading-spinner"></view>
+      <view class="loading-copy">
+        <view class="item-title">正在加载详情</view>
       </view>
     </view>
+    <rich-text wx:elif="{{detail.contentNodes && detail.contentNodes.length}}" nodes="{{detail.contentNodes}}"></rich-text>
+    <view wx:else class="article-fallback">{{detail.description}}</view>
   </view>
+</view>
 
-  <view class="section card card-pad" wx:if="{{type === 'route'}}">
-    <view class="section-title">
-      <text>顺路经过</text>
-    </view>
-    <view class="stop" wx:for="{{detail.stops}}" wx:key="*this">
-      <text class="stop-dot"></text>
-      <text>{{item}}</text>
+<view class="page detail-page" wx:elif="{{loading}}">
+  <view class="detail-loading-card card card-pad">
+    <view class="loading-spinner"></view>
+    <view class="loading-copy">
+      <view class="item-title">正在加载详情</view>
     </view>
   </view>
-
-  <view class="section card card-pad" wx:if="{{type === 'moment' || type === 'reason'}}">
-    <view class="section-title">
-      <text>为什么不尴尬</text>
-    </view>
-    <view class="rule">免费，低成本试一下。</view>
-    <view class="rule">不用报名，到了再决定停多久。</view>
-    <view class="rule">{{detail.lowPressureNote || '路过看看也行。'}}</view>
-  </view>
-
-  <view class="primary-btn detail-action" bindtap="takeAction">{{primaryText}}</view>
 </view>
 
 <view class="page empty-page" wx:else>

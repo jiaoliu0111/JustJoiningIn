@@ -1,3 +1,15 @@
 {
-  "timeout": 20
+  "timeout": 20,
+  "triggers": [
+    {
+      "name": "syncActivitiesMorning",
+      "type": "timer",
+      "config": "0 0 8 * * * *"
+    },
+    {
+      "name": "syncActivitiesEvening",
+      "type": "timer",
+      "config": "0 0 17 * * * *"
+    }
+  ]
 }

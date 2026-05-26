@@ -1,35 +1,36 @@
 <view class="page bustle-page">
-  <view class="brand-bar">
-    <view class="brand-mark">⌘</view>
-    <text>Join the Fun</text>
-    <text class="brand-bell">⌂</text>
-  </view>
-
-  <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
-    <view class="filter-row">
-      <view
-        wx:for="{{filters}}"
-        wx:key="id"
-        class="filter-chip {{activeFilter === item.id ? 'active' : ''}}"
-        data-id="{{item.id}}"
-        bindtap="selectFilter"
-      >
-        {{item.label}}
-      </view>
+  <view class="bustle-fixed-header">
+    <view class="brand-bar">
+      <view class="brand-mark">⌘</view>
+      <text>Join the Fun</text>
+      <text class="brand-bell">⌂</text>
     </view>
-  </scroll-view>
+
+    <scroll-view class="filter-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="filter-row">
+        <view
+          wx:for="{{filters}}"
+          wx:key="id"
+          class="filter-chip {{activeFilter === item.id ? 'active' : ''}}"
+          data-id="{{item.id}}"
+          bindtap="selectFilter"
+        >
+          {{item.label}}
+        </view>
+      </view>
+    </scroll-view>
+  </view>
 
   <view class="loading-card card" wx:if="{{loading}}">
     <view class="loading-spinner"></view>
     <view class="loading-copy">
       <view class="item-title">正在加载{{activeFilterLabel}}</view>
-      <view class="item-desc">正在整理附近值得看的活动，马上就好。</view>
     </view>
   </view>
 
   <view class="event-list" wx:else>
     <block wx:for="{{visibleCards}}" wx:key="id">
-      <view class="event-card card" data-type="{{item.cardType}}" data-id="{{item.id}}" bindtap="openDetail">
+      <view class="event-card card" data-type="{{item.cardType}}" data-id="{{item.id}}">
         <view class="cover-wrap">
           <image class="event-cover" src="{{item.image}}" mode="aspectFill" />
           <view class="cover-badge">{{item.category || item.badge}}</view>
@@ -37,18 +38,31 @@
         </view>
         <view class="event-body">
           <view class="event-head">
-            <view class="item-title">{{item.title}}</view>
-            <view class="price">{{item.priceLabel || '免费参加'}}</view>
+            <view class="item-title title-link" data-type="{{item.cardType}}" data-id="{{item.id}}" catchtap="openDetail">
+              {{item.title}}<text class="title-tag" wx:if="{{item.titleTag}}">{{item.titleTag}}</text>
+            </view>
           </view>
-          <view class="item-desc">{{item.description}}</view>
+          <view class="tag-row" wx:if="{{item.tags && item.tags.length && !item.hideListTags}}">
+            <text class="source-tag" wx:for="{{item.tags}}" wx:key="*this">{{item}}</text>
+          </view>
           <view class="meta-row">
-            <text>⌖ {{item.displayPlace}}</text>
-            <text>▣ {{item.displayTime}}</text>
+            <view class="place-meta">
+              <image class="place-pin-icon" src="/assets/icons/location-pin-muted.png" mode="aspectFit" />
+              <text class="place-name">{{item.displayPlace}}</text>
+            </view>
+            <view class="map-icon-btn" data-id="{{item.id}}" catchtap="navigateToMap">
+              <view class="map-pin">
+                <view class="map-pin-dot"></view>
+              </view>
+            </view>
           </view>
-          <view class="primary-btn event-action">开启导航</view>
         </view>
       </view>
     </block>
+    <view class="card card-pad empty-state" wx:if="{{!visibleCards.length && !errorText}}">
+      <view class="item-title">附近暂时没有符合条件的小热闹</view>
+      <view class="item-desc">先换个筛选，或者稍后再看看附近还有什么。</view>
+    </view>
   </view>
 
   <view class="card card-pad empty-state" wx:if="{{errorText}}">

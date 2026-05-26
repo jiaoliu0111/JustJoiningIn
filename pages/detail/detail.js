@@ -1,6 +1,10 @@
 const hotspotService = require('../../services/hotspot.js');
 const { detailTitle } = require('../../utils/format.js');
 
+function hasArticleContent(detail) {
+  return !!(detail && detail.contentNodes && detail.contentNodes.length);
+}
+
 Page({
   data: {
     type: '',
@@ -27,18 +31,31 @@ Page({
   },
 
   loadDetail(type, id) {
+    const snapshot = this.readSelectedDetail(type, id);
     this.setData({
-      loading: true,
+      detail: snapshot,
+      meta: this.buildMeta(type, snapshot),
+      loading: !hasArticleContent(snapshot),
       errorText: ''
     });
 
     hotspotService.getDetail(type, id).then((detail) => {
+      const nextDetail = detail || snapshot;
       this.setData({
-        detail,
-        meta: this.buildMeta(type, detail),
+        detail: nextDetail,
+        meta: this.buildMeta(type, nextDetail),
         loading: false
       });
     }).catch(() => {
+      if (snapshot) {
+        this.setData({
+          detail: snapshot,
+          meta: this.buildMeta(type, snapshot),
+          loading: false,
+          errorText: ''
+        });
+        return;
+      }
       this.setData({
         detail: null,
         loading: false,
@@ -47,11 +64,23 @@ Page({
     });
   },
 
+  readSelectedDetail(type, id) {
+    try {
+      const stored = wx.getStorageSync('hotspot:selectedDetail');
+      if (stored && stored.type === type && stored.id === id) {
+        return stored.detail || null;
+      }
+    } catch (error) {
+      return null;
+    }
+    return null;
+  },
+
   primaryText(type) {
     if (type === 'route') {
-      return '现在去看看';
+      return '导航到这里';
     }
-    return '现在去看看';
+    return '导航到这里';
   },
 
   buildMeta(type, detail) {

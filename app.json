@@ -2,7 +2,6 @@
   "pages": [
     "pages/home/home",
     "pages/bustle/bustle",
-    "pages/map/map",
     "pages/group/group",
     "pages/mine/mine",
     "pages/detail/detail"
@@ -34,18 +33,17 @@
         "selectedIconPath": "assets/tabbar/bustle-active.png"
       },
       {
-        "pagePath": "pages/map/map",
-        "text": "地图",
-        "iconPath": "assets/tabbar/map.png",
-        "selectedIconPath": "assets/tabbar/map-active.png"
-      },
-      {
         "pagePath": "pages/mine/mine",
         "text": "我的",
         "iconPath": "assets/tabbar/mine.png",
         "selectedIconPath": "assets/tabbar/mine-active.png"
       }
     ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于在地图页显示当前位置，并为你提供地点导航"
+    }
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"

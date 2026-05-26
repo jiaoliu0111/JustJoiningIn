@@ -1,8 +1,8 @@
 <view class="page">
   <view class="group-hero">
-    <view class="eyebrow">出门理由</view>
-    <view class="group-title">给你一个现在出门的小理由</view>
-    <view class="group-desc">不约人，不报名，不需要准备。挑一个近的，路过看看就行。</view>
+    <view class="eyebrow">偏好推荐</view>
+    <view class="group-title">给你挑一个现在能去的地方</view>
+    <view class="group-desc">按你的位置、步行范围和安静偏好，优先挑近的、免费的、不用报名的选择。</view>
   </view>
 
   <view class="section card card-pad reason-main" wx:if="{{selectedMoment}}">
@@ -19,12 +19,12 @@
       <text class="tag" wx:for="{{selectedMoment.tags}}" wx:key="*this">{{item}}</text>
     </view>
     <view class="primary-btn reason-action" bindtap="openSelected">现在去看看</view>
-    <view class="secondary-btn reason-secondary" bindtap="shuffleReason">换一个近点的</view>
+    <view class="secondary-btn reason-secondary" bindtap="shuffleReason">换一个更合适的</view>
   </view>
 
   <view class="section">
     <view class="section-title">
-      <text>其他轻松理由</text>
+      <text>其他轻松推荐</text>
     </view>
     <view
       class="card card-pad reason-item {{selectedIndex === index ? 'active' : ''}}"

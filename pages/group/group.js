@@ -35,7 +35,7 @@ Page({
     }).catch(() => {
       this.setData({
         loading: false,
-        errorText: '出门理由暂时加载失败'
+        errorText: '推荐暂时加载失败'
       });
     });
   },

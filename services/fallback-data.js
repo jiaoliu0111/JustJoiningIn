@@ -58,7 +58,7 @@ const moments = [
     color: 'peach',
     priceLabel: '免费参加',
     category: '附近热门',
-    image: '/assets/events/studio.png',
+    image: '/assets/events/park.png',
     mapX: 64,
     mapY: 28
   }
@@ -68,7 +68,7 @@ const reasons = [
   {
     id: 'preview-reason-nearest',
     sortOrder: 10,
-    title: '最近的免费理由',
+    title: '最近的免费选择',
     subtitle: '6 分钟走到街角，拿一杯试饮咖啡。',
     momentId: 'preview-coffee',
     cta: '现在去看看'

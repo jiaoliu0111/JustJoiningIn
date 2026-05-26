@@ -5,34 +5,70 @@
     <text class="brand-bell">⌂</text>
   </view>
 
-  <view class="profile-hero">
-    <image class="profile-illustration" src="/assets/events/cat.png" mode="aspectFill" />
-    <view class="profile-title">欢迎来到个人中心</view>
-    <view class="profile-desc">登录后开启你的漫步日志吧</view>
-    <view class="primary-btn login-btn">立即登录 / 注册</view>
+  <view class="mine-hero">
+    <view class="eyebrow">我的轻偏好</view>
+    <view class="mine-title">让推荐更不费劲</view>
+    <view class="mine-desc">默认只保留免费、近一点、不会尴尬的小热闹。</view>
   </view>
 
-  <view class="mine-menu">
-    <view class="menu-card">
-      <view class="menu-icon heart">♡</view>
-      <view class="menu-copy">
-        <view class="item-title">我的收藏</view>
-        <view class="item-desc">保存你喜欢的活动与地点</view>
+  <view class="section card card-pad preference-card">
+    <view class="section-title">步行范围</view>
+    <view class="walk-options">
+      <view
+        class="walk-chip {{preferences.walkMinutes === item ? 'active' : ''}}"
+        wx:for="{{walkMinutes}}"
+        wx:key="*this"
+        data-value="{{item}}"
+        bindtap="selectWalkMinutes"
+      >
+        {{item}} 分钟内
       </view>
-      <view class="menu-arrow">›</view>
-    </view>
-    <view class="menu-card">
-      <view class="menu-icon note">▣</view>
-      <view class="menu-copy">
-        <view class="item-title">我的日志</view>
-        <view class="item-desc">记录每一次出发的回忆</view>
-      </view>
-      <view class="menu-arrow">›</view>
     </view>
   </view>
 
-  <view class="mine-links">
-    <text>帮助中心</text>
-    <text>设置</text>
+  <view class="section card card-pad preference-card">
+    <view class="pref-row">
+      <view class="menu-copy">
+        <view class="item-title">只看免费</view>
+        <view class="item-desc">过滤需要提前消费或购票的活动</view>
+      </view>
+      <switch color="#007968" checked="{{preferences.freeOnly}}" data-key="freeOnly" bindchange="togglePreference" />
+    </view>
+    <view class="pref-row">
+      <view class="menu-copy">
+        <view class="item-title">不用报名优先</view>
+        <view class="item-desc">到了再决定停多久，不做承诺</view>
+      </view>
+      <switch color="#007968" checked="{{preferences.noSignupFirst}}" data-key="noSignupFirst" bindchange="togglePreference" />
+    </view>
+    <view class="pref-row">
+      <view class="menu-copy">
+        <view class="item-title">安静路过友好</view>
+        <view class="item-desc">适合一个人看看，也不用主动聊天</view>
+      </view>
+      <switch color="#007968" checked="{{preferences.quietFriendly}}" data-key="quietFriendly" bindchange="togglePreference" />
+    </view>
+    <view class="pref-row">
+      <view class="menu-copy">
+        <view class="item-title">周末轻提醒</view>
+        <view class="item-desc">只在适合出门时给一点提醒</view>
+      </view>
+      <switch color="#007968" checked="{{preferences.gentleReminder}}" data-key="gentleReminder" bindchange="togglePreference" />
+    </view>
+  </view>
+
+  <view class="section card card-pad preference-card">
+    <view class="section-title">极简出门清单</view>
+    <view class="checklist">
+      <view class="check-item" wx:for="{{checklist}}" wx:key="*this">
+        <text class="check-dot">✓</text>
+        <text>{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card card-pad empty-state" wx:if="{{errorText}}">
+    <view class="item-title">偏好暂时没加载出来</view>
+    <view class="item-desc">{{errorText}}</view>
   </view>
 </view>

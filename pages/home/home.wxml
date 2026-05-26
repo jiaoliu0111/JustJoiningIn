@@ -1,48 +1,130 @@
 <view class="page home-page">
-  <view class="brand-bar">
-    <view class="brand-mark">⌘</view>
-    <text>Join the Fun</text>
-    <text class="brand-bell">⌂</text>
-  </view>
-
-  <view class="clock-card">
-    <view class="clock-top">
-      <text>{{currentWeekday}}</text>
-      <text class="clock-date">{{currentDate}}</text>
+  <view class="top-nav">
+    <view class="city-selector" bindtap="switchCity">
+      <text class="city-dot">⌖</text>
+      <text>{{cityName}}</text>
+      <text class="city-arrow">⌄</text>
     </view>
-    <view class="clock-time">{{currentTime}}</view>
-    <view class="clock-caption">祝你有美好的一天</view>
-  </view>
-
-  <view class="daily-card card card-pad">
-    <view class="daily-chip">♥ 每日温柔提醒</view>
-    <view class="daily-title">今天也要 对自己好一点</view>
-    <view class="daily-desc">在这个快节奏的世界里，别忘了停下来，给自己的心灵一个大大的拥抱。</view>
-    <view class="primary-btn daily-action" bindtap="goBustle">开启美好一天</view>
-    <image class="daily-image" src="/assets/events/cat.png" mode="aspectFill" />
-  </view>
-
-  <view class="hot-card" bindtap="goBustle">
-    <view class="hot-icon">
-      <view class="hot-icon-core"></view>
+    <view class="search-box">
+      <text class="search-icon">⌕</text>
+      <input
+        value="{{searchKeyword}}"
+        placeholder="搜索地点、关键词、活动"
+        confirm-type="search"
+        bindinput="updateSearch"
+        bindconfirm="goSearch"
+      />
     </view>
-    <view class="hot-title">本市热门</view>
-    <view class="hot-desc">查看大家都在逛哪里</view>
-    <view class="hot-arrow">→</view>
+    <view class="message-btn" bindtap="openMessages">⌂</view>
   </view>
 
-  <view class="section">
-    <view class="section-title">发现生活中的小确幸</view>
-    <view class="home-copy">
-      不论是清晨的一杯热茶，还是路边的一朵野花，都是大自然给你的小惊喜。记录下这些瞬间，让美好在心中流淌。
-    </view>
-    <view class="habit-list">
-      <view class="habit-item" wx:for="{{checklist}}" wx:key="*this">
-        <text class="habit-check">✓</text>
-        <text>{{item}}</text>
+  <swiper class="hero-swiper" indicator-dots autoplay circular interval="3600">
+    <swiper-item wx:for="{{banners}}" wx:key="id">
+      <view class="banner-card" bindtap="goBustle">
+        <image class="banner-image" src="{{item.image}}" mode="aspectFill" />
+        <view class="banner-shade"></view>
+        <view class="banner-copy">
+          <view class="banner-badge">{{item.badge}}</view>
+          <view class="banner-title">{{item.title}}</view>
+          <view class="banner-subtitle">{{item.subtitle}}</view>
+        </view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <scroll-view class="quick-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+    <view class="quick-entry-row">
+      <view
+        class="quick-entry"
+        wx:for="{{quickEntries}}"
+        wx:key="id"
+        data-filter="{{item.filterId}}"
+        bindtap="goQuickEntry"
+      >
+        <view class="quick-icon">
+          <image wx:if="{{item.imageIcon}}" class="quick-icon-image" src="{{item.imageIcon}}" mode="aspectFit" />
+          <text wx:else>{{item.icon}}</text>
+        </view>
+        <view class="quick-label">{{item.label}}</view>
       </view>
     </view>
-    <image class="landscape-image" src="/assets/events/park.png" mode="aspectFill" />
+  </scroll-view>
+
+  <view class="portal-section">
+    <view class="section-head">
+      <view class="section-title">附近好去处</view>
+      <view class="more-link" bindtap="goBustle">查看更多</view>
+    </view>
+    <view class="nearby-list">
+      <view
+        class="nearby-card"
+        wx:for="{{nearbyMoments}}"
+        wx:key="id"
+        data-type="moment"
+        data-id="{{item.id}}"
+        bindtap="openDetail"
+      >
+        <image class="nearby-thumb" src="{{item.image}}" mode="aspectFill" />
+        <view class="nearby-main">
+          <view class="place-title">{{item.title}}</view>
+          <view class="place-meta">{{item.place}} · {{item.distanceLabel}}</view>
+          <view class="tag-row compact-tags">
+            <text class="tag" wx:for="{{item.previewTags}}" wx:key="*this">{{item}}</text>
+          </view>
+          <view class="place-desc">{{item.description}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="portal-section">
+    <view class="section-head">
+      <view class="section-title">本周人气逛点</view>
+      <view class="more-link" bindtap="goBustle">查看更多</view>
+    </view>
+    <scroll-view class="popular-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="popular-row">
+        <view
+          class="popular-card"
+          wx:for="{{popularMoments}}"
+          wx:key="id"
+          data-type="moment"
+          data-id="{{item.id}}"
+          bindtap="openDetail"
+        >
+          <image class="popular-image" src="{{item.image}}" mode="aspectFill" />
+          <view class="popular-title">{{item.title}}</view>
+          <view class="popular-meta">评分 {{item.rating}} · {{item.checkins}} 人打卡</view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="portal-section">
+    <view class="section-head">
+      <view class="section-title">懒人游玩方案</view>
+      <view class="more-link" bindtap="goRecommend">查看更多</view>
+    </view>
+    <view class="route-list">
+      <view
+        class="route-card"
+        wx:for="{{routePlans}}"
+        wx:key="id"
+        data-type="route"
+        data-id="{{item.id}}"
+        bindtap="openDetail"
+      >
+        <view class="route-top">
+          <view class="route-title">{{item.title}}</view>
+          <view class="route-time">{{item.duration}}</view>
+        </view>
+        <view class="route-stops">{{item.stopText}}</view>
+        <view class="route-bottom">
+          <text>{{item.peopleLabel}}</text>
+          <text>{{item.difficulty}}</text>
+        </view>
+      </view>
+    </view>
   </view>
 
   <view class="card card-pad empty-state" wx:if="{{errorText}}">

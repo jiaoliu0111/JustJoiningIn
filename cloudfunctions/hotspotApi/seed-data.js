@@ -1,3 +1,5 @@
+const { SOURCE_CONFIGS } = require('./source-configs.js');
+
 const moments = [
   {
     id: 'moment-coffee',
@@ -14,7 +16,7 @@ const moments = [
     quietFriendly: true,
     lowPressureNote: '拿一杯就走，不尴尬。',
     color: 'mint',
-    priceLabel: '¥19 起',
+    priceLabel: '免费参加',
     category: '本市热门',
     image: '/assets/events/summer.png',
     mapX: 30,
@@ -37,7 +39,7 @@ const moments = [
     color: 'green',
     priceLabel: '免费参加',
     category: '附近热门',
-    image: '/assets/events/studio.png',
+    image: '/assets/events/park.png',
     mapX: 64,
     mapY: 28
   },
@@ -110,7 +112,7 @@ const reasons = [
   {
     id: 'reason-nearest',
     sortOrder: 10,
-    title: '最近的免费理由',
+    title: '最近的免费选择',
     subtitle: '6 分钟走到街角，拿一杯试饮咖啡。',
     momentId: 'moment-coffee',
     cta: '现在去看看'
@@ -118,15 +120,15 @@ const reasons = [
   {
     id: 'reason-quiet',
     sortOrder: 20,
-    title: '不需要说话的理由',
+    title: '不需要说话的去处',
     subtitle: '去草坪边听一首歌，站着也行。',
     momentId: 'moment-guitar',
-    cta: '给我这个理由'
+    cta: '就看这个'
   },
   {
     id: 'reason-indoor',
     sortOrder: 30,
-    title: '不晒太阳的理由',
+    title: '不晒太阳的去处',
     subtitle: '商场中庭有宠物领养日，看看就能回。',
     momentId: 'moment-adoption',
     cta: '就看这个'
@@ -180,10 +182,27 @@ const preferences = {
 
 const checklist = ['穿舒服的鞋', '带水杯', '轻装出行'];
 
+const publishedMoments = moments.map((moment) => ({
+  ...moment,
+  status: 'published',
+  sourceId: 'source-local-preview',
+  sourceType: 'seed',
+  trustLevel: 'whitelist',
+  parserType: 'manual',
+  dedupeKey: `seed:${moment.id}`,
+  rawTitle: moment.title,
+  rawSummary: moment.description,
+  rawDateText: moment.timeLabel,
+  reviewNote: '',
+  lastSeenAt: '2026-05-21T00:00:00.000Z',
+  syncedAt: '2026-05-21T00:00:00.000Z'
+}));
+
 module.exports = {
-  moments,
+  moments: publishedMoments,
   reasons,
   routes,
+  sources: SOURCE_CONFIGS,
   preferences,
   checklist
 };

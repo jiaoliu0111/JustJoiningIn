@@ -1,7 +1,7 @@
 function detailTitle(type) {
   return {
     moment: '附近小热闹',
-    reason: '出门理由',
+    reason: '推荐去处',
     route: '放空路线',
   }[type] || '详情';
 }
